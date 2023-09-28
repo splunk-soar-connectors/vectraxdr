@@ -141,7 +141,7 @@
         {
             "action": "describe detection",
             "identifier": "describe_detection",
-            "description": "describes detection",
+            "description": "Describes detection",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -3628,7 +3628,7 @@
         {
             "action": "download pcap",
             "identifier": "download_pcap",
-            "description": "download PCAP of a detection",
+            "description": "Download PCAP of a detection",
             "type": "investigate",
             "read_only": true,
             "parameters": {
