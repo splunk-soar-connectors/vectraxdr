@@ -413,11 +413,15 @@ class OnPollAction(BaseAction):
 
             self._connector.debug_print(f"value of total_ingested is {str(total_ingested)}")
             total_ingested += max_allowed_container - self._connector._dup_entities
-            self._connector.debug_print(f"Value of max_allowed_container is {str(max_allowed_container)}, duplicates is {self._connector._dup_entities}, run_limit is {run_limit}")
+            self._connector.debug_print(
+                f"Value of max_allowed_container is {str(max_allowed_container)}, "
+                f"duplicates is {self._connector._dup_entities}, run_limit is {run_limit}"
+            )
             self._connector.save_progress("Got total {} entities".format(len(entities)))
 
             if entities and not self._connector.is_poll_now():
-                self._connector.state[consts.VECTRA_LAST_MODIFIED_TIMESTAMP_IN_STATE] = entities[-1][consts.VECTRA_LAST_MODIFIED_TIMESTAMP_IN_STATE]
+                self._connector.state[consts.VECTRA_LAST_MODIFIED_TIMESTAMP_IN_STATE] = \
+                    entities[-1][consts.VECTRA_LAST_MODIFIED_TIMESTAMP_IN_STATE]
 
             if total_ingested >= run_limit:
                 break
