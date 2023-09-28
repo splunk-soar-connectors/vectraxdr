@@ -30,8 +30,7 @@ import requests_mock
 import vectraxdr_consts as consts
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config
-from . import vectra_responses
+from . import config, vectra_responses
 
 
 class TestOnPollAction(unittest.TestCase):

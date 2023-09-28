@@ -22,11 +22,12 @@
 # and limitations under the License.
 
 
-import phantom.app as phantom
-import vectraxdr_consts as consts
 from datetime import datetime, timedelta
+
+import phantom.app as phantom
 import requests
 
+import vectraxdr_consts as consts
 from actions import BaseAction
 
 

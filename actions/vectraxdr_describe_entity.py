@@ -22,6 +22,7 @@
 # and limitations under the License.
 
 import phantom.app as phantom
+
 import vectraxdr_consts as consts
 from actions import BaseAction
 

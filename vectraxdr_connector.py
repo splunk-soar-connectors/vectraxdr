@@ -21,16 +21,17 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 
-import phantom.app as phantom
-from phantom.base_connector import BaseConnector
-from vectraxdr_utils import VectraxdrUtils
-from phantom.action_result import ActionResult
-from actions import BaseAction
-from importlib import import_module
-import vectraxdr_consts as consts
-
-import requests
 import json
+from importlib import import_module
+
+import phantom.app as phantom
+import requests
+from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
+
+import vectraxdr_consts as consts
+from actions import BaseAction
+from vectraxdr_utils import VectraxdrUtils
 
 
 class VectraxdrConnector(BaseConnector):

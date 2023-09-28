@@ -22,17 +22,19 @@
 # and limitations under the License.
 
 
+import os
 import time
+import uuid
+from datetime import datetime, timezone
+
 import dateparser
 import encryption_helper
 import phantom.app as phantom
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime, timezone
-import vectraxdr_consts as consts
 from phantom.vault import Vault
-import uuid
-import os
+
+import vectraxdr_consts as consts
 
 
 class RetVal(tuple):

@@ -1,5 +1,6 @@
 """Mock responses' jsons."""
 import json
+
 GET_REFRESH_TOKEN = json.loads("""{
     "access_token": "<dummy_access_token>",
     "expires_in": 21600,

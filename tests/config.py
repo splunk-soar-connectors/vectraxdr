@@ -21,11 +21,12 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 
-import encryption_helper
-from dotenv import load_dotenv
 import json
 import os
+
+import encryption_helper
 import requests
+from dotenv import load_dotenv
 
 # Load '.env' file to the environment variables.
 load_dotenv()

@@ -23,13 +23,15 @@
 
 
 import json
+import os
 import unittest
 
-from vectraxdr_connector import VectraxdrConnector
 import requests_mock
-from . import config
+
 import vectraxdr_consts as consts
-import os
+from vectraxdr_connector import VectraxdrConnector
+
+from . import config
 
 
 class DownloadPCAPAction(unittest.TestCase):

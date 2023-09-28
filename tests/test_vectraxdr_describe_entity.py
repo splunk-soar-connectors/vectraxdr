@@ -27,8 +27,8 @@ import unittest
 from unittest.mock import patch
 
 from vectraxdr_connector import VectraxdrConnector
-from . import vectra_responses
-from . import config
+
+from . import config, vectra_responses
 
 
 class DescribeEntityAction(unittest.TestCase):
