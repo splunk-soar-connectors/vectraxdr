@@ -2145,7 +2145,7 @@
                     "data_type": "string",
                     "required": true,
                     "order": 2,
-                    "primary":true,
+                    "primary": true,
                     "contains": [
                         "tag"
                     ]
@@ -2186,7 +2186,6 @@
                     "contains": [
                         "tag"
                     ]
-
                 },
                 {
                     "data_path": "action_result.data.*.status",
@@ -2277,7 +2276,7 @@
                     "data_type": "string",
                     "required": true,
                     "order": 2,
-                    "primary":true,
+                    "primary": true,
                     "contains": [
                         "tag"
                     ]
@@ -3765,10 +3764,6 @@
                 "input_file": "wheels/py3/beautifulsoup4-4.11.2-py3-none-any.whl"
             },
             {
-                "module": "soupsieve",
-                "input_file": "wheels/py3/soupsieve-2.4.1-py3-none-any.whl"
-            },
-            {
                 "module": "dateparser",
                 "input_file": "wheels/shared/dateparser-1.1.8-py2.py3-none-any.whl"
             },
@@ -3778,19 +3773,23 @@
             },
             {
                 "module": "pytz",
-                "input_file": "wheels/shared/pytz-2023.3-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/pytz-2023.3.post1-py2.py3-none-any.whl"
             },
             {
                 "module": "regex",
-                "input_file": "wheels/py39/regex-2023.8.8-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+                "input_file": "wheels/py39/regex-2023.10.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
             },
             {
                 "module": "six",
                 "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
             },
             {
+                "module": "soupsieve",
+                "input_file": "wheels/py3/soupsieve-2.5-py3-none-any.whl"
+            },
+            {
                 "module": "tzlocal",
-                "input_file": "wheels/py3/tzlocal-5.0.1-py3-none-any.whl"
+                "input_file": "wheels/py3/tzlocal-5.1-py3-none-any.whl"
             }
         ]
     }
