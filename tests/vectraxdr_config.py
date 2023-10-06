@@ -116,7 +116,7 @@ def get_session_id(connector, verify=False):
 
     # TODO: Remove this
     os.environ["USERNAME"] = "soar_local_admin"
-    os.environ["PASSWORD"] = "password"
+    os.environ["PASSWORD"] = "password"  # pragma: allowlist secret  width="300" height="390"
     data = {
         "username": os.environ.get("USERNAME"),
         "password": os.environ.get("PASSWORD"),

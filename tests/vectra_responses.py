@@ -672,10 +672,10 @@ GET_DETECTIO_FROM_ENTITY_RESP = json.loads("""{
                     "bytes_received": 672032,
                     "bytes_sent": 30713,
                     "ja3_hashes": [
-                        "3b5074b1b5d032e5620f69f9f700ff0e"
+                        "3b5074b1b5d032e5620f69f9f700ff0e"  # pragma: allowlist secret`
                     ],
                     "ja3s_hashes": [
-                        "ec74a5c51106f0419184d0dd08fb05bc"
+                        "ec74a5c51106f0419184d0dd08fb05bc"  # pragma: allowlist secret`
                     ],
                     "sessions": [
                         {
@@ -781,10 +781,10 @@ GET_DETECTIO_FROM_ENTITY_RESP = json.loads("""{
                     "bytes_received": 650828,
                     "bytes_sent": 29297,
                     "ja3_hashes": [
-                        "3b5074b1b5d032e5620f69f9f700ff0e"
+                        "3b5074b1b5d032e5620f69f9f700ff0e"  # pragma: allowlist secret`
                     ],
                     "ja3s_hashes": [
-                        "ec74a5c51106f0419184d0dd08fb05bc"
+                        "ec74a5c51106f0419184d0dd08fb05bc"  # pragma: allowlist secret`
                     ],
                     "sessions": [
                         {

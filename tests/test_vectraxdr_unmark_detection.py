@@ -29,7 +29,7 @@ from unittest.mock import patch
 import vectraxdr_consts as consts
 from vectraxdr_connector import VectraxdrConnector
 
-from . import vectraxdr_config, vectra_responses
+from . import vectra_responses, vectraxdr_config
 
 
 class UnmarkDetectionAction(unittest.TestCase):

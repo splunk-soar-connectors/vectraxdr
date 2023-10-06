@@ -420,7 +420,7 @@ class TestGenerateRefreshToken(unittest.TestCase):
         connector.error_print.return_value = None
         connector.config = {
             "client_id": "12345",
-            "client_secret": "secret"
+            "client_secret": "secret"  # pragma: allowlist secret`
         }
         connector.state = {"token": {}}
         self.response = Mock()
