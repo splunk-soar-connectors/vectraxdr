@@ -67,7 +67,8 @@ class DownloadPCAPAction(BaseAction):
             if os.path.exists(file_path):
                 os.rmdir(file_path)
         except Exception as e:
-            self._connector.debug_print(f"Unable to delete the temporary directory: {self._get_error_message_from_exception(e)}")
+            self._connector.debug_print(f"Unable to delete the temporary directory: "
+                                        f"{self._connector.util._get_error_message_from_exception(e)}")
 
         self._action_result.add_data({"vault_id": vault_id, "file_name": file_name})
 

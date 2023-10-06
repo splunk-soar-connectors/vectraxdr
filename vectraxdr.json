@@ -16,10 +16,8 @@
     "package_name": "phantom_vectraxdr",
     "main_module": "vectraxdr_connector.py",
     "min_phantom_version": "6.0.2",
+    "fips_compliant": false,
     "app_wizard_version": "1.0.0",
-    "latest_tested_versions": [
-        "Vectra XDR, API v3.3, 15th Aug, 2023"
-    ],
     "configuration": {
         "base_url": {
             "description": "Vectra Base URL",
