@@ -28,7 +28,7 @@ from unittest.mock import patch
 
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config, vectra_responses
+from . import vectraxdr_config, vectra_responses
 
 
 class ListEntityDetectionsAction(unittest.TestCase):
@@ -38,7 +38,7 @@ class ListEntityDetectionsAction(unittest.TestCase):
         """Set up method for the tests."""
         self.connector = VectraxdrConnector()
         self.test_json = dict()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(vectraxdr_config.TEST_JSON)
         self.test_json.update({"action": "list entity detections", "identifier": "list_entity_detections"})
 
         return super().setUp()
@@ -54,10 +54,10 @@ class ListEntityDetectionsAction(unittest.TestCase):
         def mock_get_response(*args, **kwargs):
             url = args[0] if args else kwargs.get("url", "")
             if 'entities' in url:
-                return MockResponse(status_code=200, headers=config.DEFAULT_HEADERS, text=vectra_responses.GET_ENTITY)
+                return MockResponse(status_code=200, headers=vectraxdr_config.DEFAULT_HEADERS, text=vectra_responses.GET_ENTITY)
             elif 'detections' in url:
-                return MockResponse(status_code=200, headers=config.DEFAULT_HEADERS, text=vectra_responses.GET_DETECTION)
-        config.set_state_file(Token=True)
+                return MockResponse(status_code=200, headers=vectraxdr_config.DEFAULT_HEADERS, text=vectra_responses.GET_DETECTION)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{"entity_id": 100, "entity_type": "host"}]
 
         mock_get.side_effect = mock_get_response
@@ -80,10 +80,10 @@ class ListEntityDetectionsAction(unittest.TestCase):
         def mock_get_response(*args, **kwargs):
             url = args[0] if args else kwargs.get("url", "")
             if 'entities' in url:
-                return MockResponse(status_code=404, headers=config.DEFAULT_HEADERS, text=vectra_responses.NOT_EXISTS_ENTITY)
+                return MockResponse(status_code=404, headers=vectraxdr_config.DEFAULT_HEADERS, text=vectra_responses.NOT_EXISTS_ENTITY)
             elif 'detections' in url:
-                return MockResponse(status_code=200, headers=config.DEFAULT_HEADERS, text=vectra_responses.GET_DETECTION)
-        config.set_state_file(Token=True)
+                return MockResponse(status_code=200, headers=vectraxdr_config.DEFAULT_HEADERS, text=vectra_responses.GET_DETECTION)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{"entity_id": 1000, "entity_type": "host"}]
 
         mock_get.side_effect = mock_get_response
@@ -102,7 +102,7 @@ class ListEntityDetectionsAction(unittest.TestCase):
         Patch the get() to return the valid response.
         """
         # Define the side_effect function
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{"entity_id": 1000, "entity_type": "invalid_host"}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)

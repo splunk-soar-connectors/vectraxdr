@@ -28,7 +28,7 @@ from unittest.mock import patch
 
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config, vectra_responses
+from . import vectraxdr_config, vectra_responses
 
 
 class DescribeDetectionAction(unittest.TestCase):
@@ -38,7 +38,7 @@ class DescribeDetectionAction(unittest.TestCase):
         """Set up method for the tests."""
         self.connector = VectraxdrConnector()
         self.test_json = dict()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(vectraxdr_config.TEST_JSON)
         self.test_json.update({"action": "describe detection", "identifier": "describe_detection"})
 
         return super().setUp()
@@ -50,11 +50,11 @@ class DescribeDetectionAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'detection_id': 432}]
 
         mock_get.return_value.status_code = 200
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = vectra_responses.GET_DETECTION
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -71,7 +71,7 @@ class DescribeDetectionAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'detection_id': 0}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -88,11 +88,11 @@ class DescribeDetectionAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'detection_id': 0}]
 
         mock_get.return_value.status_code = 404
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = vectra_responses.NOT_EXISTS_DETECTION
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)

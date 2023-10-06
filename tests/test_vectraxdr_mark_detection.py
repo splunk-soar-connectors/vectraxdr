@@ -29,7 +29,7 @@ from unittest.mock import patch
 import vectraxdr_consts as consts
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config, vectra_responses
+from . import vectraxdr_config, vectra_responses
 
 
 class MarkDetectionAction(unittest.TestCase):
@@ -39,7 +39,7 @@ class MarkDetectionAction(unittest.TestCase):
         """Set up method for the tests."""
         self.connector = VectraxdrConnector()
         self.test_json = dict()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(vectraxdr_config.TEST_JSON)
         self.test_json.update({"action": "mark detection", "identifier": "mark_detection"})
 
         return super().setUp()
@@ -52,11 +52,11 @@ class MarkDetectionAction(unittest.TestCase):
         Patch the patch() to return the valid response.
         """
         detection_id = 1952
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'detection_id': detection_id}]
 
         mock_patch.return_value.status_code = 200
-        mock_patch.return_value.headers = config.DEFAULT_HEADERS
+        mock_patch.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_patch.return_value.json.return_value = vectra_responses.MARK_DETECTION
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -64,8 +64,8 @@ class MarkDetectionAction(unittest.TestCase):
         self.assertEqual(ret_val['status'], 'success')
 
         mock_patch.assert_called_with(
-            f"{config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_DETECTIONS_ENDPOINT}",
-            headers=config.ACTION_HEADER,
+            f"{vectraxdr_config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_DETECTIONS_ENDPOINT}",
+            headers=vectraxdr_config.ACTION_HEADER,
             json={"detectionIdList": [detection_id], "mark_as_fixed": "True"},
             timeout=consts.VECTRA_REQUEST_TIMEOUT,
             params=None,
@@ -80,11 +80,11 @@ class MarkDetectionAction(unittest.TestCase):
         Patch the patch() to return the valid response.
         """
         detection_id = 9999999999
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'detection_id': detection_id}]
 
         mock_patch.return_value.status_code = 404
-        mock_patch.return_value.headers = config.DEFAULT_HEADERS
+        mock_patch.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_patch.return_value.json.return_value = vectra_responses.MARK_INVALID_DETECTION
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -92,8 +92,8 @@ class MarkDetectionAction(unittest.TestCase):
         self.assertEqual(ret_val['status'], 'failed')
 
         mock_patch.assert_called_with(
-            f"{config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_DETECTIONS_ENDPOINT}",
-            headers=config.ACTION_HEADER,
+            f"{vectraxdr_config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_DETECTIONS_ENDPOINT}",
+            headers=vectraxdr_config.ACTION_HEADER,
             json={"detectionIdList": [detection_id], "mark_as_fixed": "True"},
             timeout=consts.VECTRA_REQUEST_TIMEOUT,
             params=None,

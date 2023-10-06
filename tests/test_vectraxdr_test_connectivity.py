@@ -29,7 +29,7 @@ from unittest.mock import patch
 import vectraxdr_consts as consts
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config, vectra_responses
+from . import vectraxdr_config, vectra_responses
 
 
 class TestConnectivityAction(unittest.TestCase):
@@ -38,7 +38,7 @@ class TestConnectivityAction(unittest.TestCase):
     def setUp(self):
         """Set up method for the tests."""
         self.connector = VectraxdrConnector()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(vectraxdr_config.TEST_JSON)
         self.test_json.update({"action": "test connectivity", "identifier": "test_connectivity"})
 
         return super().setUp()
@@ -52,10 +52,10 @@ class TestConnectivityAction(unittest.TestCase):
         Patch the post() to return valid token.
         """
         mock_post.return_value.status_code = 200
-        mock_post.return_value.headers = config.DEFAULT_HEADERS
+        mock_post.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = vectra_responses.GET_REFRESH_TOKEN
         mock_get.return_value.status_code = 200
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = vectra_responses.GET_ENTITY
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -63,8 +63,8 @@ class TestConnectivityAction(unittest.TestCase):
         self.assertEqual(ret_val['status'], 'success')
 
         mock_post.assert_called_with(
-            f"{config.DUMMY_BASE_URL}{consts.VECTRA_ENDPOINT_TOKEN}",
-            headers=config.TOKEN_HEADER,
+            f"{vectraxdr_config.DUMMY_BASE_URL}{consts.VECTRA_ENDPOINT_TOKEN}",
+            headers=vectraxdr_config.TOKEN_HEADER,
             data={"grant_type": "client_credentials"},
             auth=('<client_id>', '<dummy_client_secret>'),
             timeout=consts.VECTRA_REQUEST_TIMEOUT,
@@ -73,8 +73,8 @@ class TestConnectivityAction(unittest.TestCase):
         )
 
         mock_get.assert_called_with(
-            f"{config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_LIST_ENTITIES}",
-            headers=config.ACTION_HEADER,
+            f"{vectraxdr_config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_LIST_ENTITIES}",
+            headers=vectraxdr_config.ACTION_HEADER,
             params={'page_size': 1},
             timeout=consts.VECTRA_REQUEST_TIMEOUT,
             verify=False,
@@ -88,15 +88,15 @@ class TestConnectivityAction(unittest.TestCase):
         Patch the post() to return authentication error.
         """
         mock_post.return_value.status_code = 401
-        mock_post.return_value.headers = config.DEFAULT_HEADERS
+        mock_post.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = {"error": "Authentication Error. Please try reauthenticating using API client credentials."}
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
         self.assertEqual(ret_val['status'], 'failed')
 
         mock_post.assert_called_with(
-            f"{config.DUMMY_BASE_URL}{consts.VECTRA_ENDPOINT_TOKEN}",
-            headers=config.TOKEN_HEADER,
+            f"{vectraxdr_config.DUMMY_BASE_URL}{consts.VECTRA_ENDPOINT_TOKEN}",
+            headers=vectraxdr_config.TOKEN_HEADER,
             data={"grant_type": "client_credentials"},
             auth=('<client_id>', '<dummy_client_secret>'),
             timeout=consts.VECTRA_REQUEST_TIMEOUT,

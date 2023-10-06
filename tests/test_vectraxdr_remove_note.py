@@ -28,7 +28,7 @@ from unittest.mock import patch
 
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config, vectra_responses
+from . import vectraxdr_config, vectra_responses
 
 
 class RemoveNoteAction(unittest.TestCase):
@@ -38,7 +38,7 @@ class RemoveNoteAction(unittest.TestCase):
         """Set up method for the tests."""
         self.connector = VectraxdrConnector()
         self.test_json = dict()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(vectraxdr_config.TEST_JSON)
         self.test_json.update({"action": "remove note", "identifier": "remove_note"})
 
         return super().setUp()
@@ -50,11 +50,11 @@ class RemoveNoteAction(unittest.TestCase):
         Token is available in the state file.
         Patch the delete() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_id': 212, "entity_type": "host", "note_id": 123}]
 
         mock_delete.return_value.status_code = 204
-        mock_delete.return_value.headers = {"Content-Type": config.CONTENT_HTML_TYPE}
+        mock_delete.return_value.headers = {"Content-Type": vectraxdr_config.CONTENT_HTML_TYPE}
         mock_delete.return_value.json.return_value = ""
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -71,11 +71,11 @@ class RemoveNoteAction(unittest.TestCase):
         Token is available in the state file.
         Patch the delete() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_id': 212, "entity_type": "host", "note_id": 456}]
 
         mock_delete.return_value.status_code = 404
-        mock_delete.return_value.headers = {"Content-Type": config.CONTENT_HTML_TYPE}
+        mock_delete.return_value.headers = {"Content-Type": vectraxdr_config.CONTENT_HTML_TYPE}
         mock_delete.return_value.json.return_value = vectra_responses.REMOVE_NOTE_RESP
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -91,7 +91,7 @@ class RemoveNoteAction(unittest.TestCase):
         Token is available in the state file.
         Patch the delete() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_type': "account_not_present", 'entity_id': 1, "note_id": 123}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)

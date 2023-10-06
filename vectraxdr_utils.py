@@ -1,4 +1,3 @@
-"""Class for connector's utility methods."""
 # File: vectraxdr_utils.py
 #
 # Copyright (c) 2023 Vectra

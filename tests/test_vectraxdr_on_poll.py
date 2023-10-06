@@ -30,7 +30,7 @@ import requests_mock
 import vectraxdr_consts as consts
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config, vectra_responses
+from . import vectraxdr_config, vectra_responses
 
 
 class TestOnPollAction(unittest.TestCase):
@@ -42,7 +42,7 @@ class TestOnPollAction(unittest.TestCase):
         # Reset the global object to avoid failures
         base_conn.connector_obj = None
 
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(vectraxdr_config.TEST_JSON)
         self.test_json.update({"action": "on poll", "identifier": "on_poll"})
 
         return super().setUp()
@@ -54,31 +54,31 @@ class TestOnPollAction(unittest.TestCase):
         Token is available in the state file.
         Mock the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
 
         self.test_json.get('config').update({"on_poll_start_time": "2023-05-24T14:13:34",
                                              "is_entity_prioritized": 'all', "entity_type": 'Account',
                                              "entity_tags": "test1,test2", "detection_category": "Command and Control",
                                              "detection_type": "test2"})
-        self.test_json.update({"user_session_token": config.get_session_id(self.connector)})
+        self.test_json.update({"user_session_token": vectraxdr_config.get_session_id(self.connector)})
         mock_get.get(
-            f"{config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_LIST_ENTITIES}",
+            f"{vectraxdr_config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_LIST_ENTITIES}",
             status_code=200,
-            headers=config.DEFAULT_HEADERS,
+            headers=vectraxdr_config.DEFAULT_HEADERS,
             json=vectra_responses.GET_ENTITIES_ON_POLL
         )
 
         mock_get.get(
-            f"{config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_GET_ASSIGNMENTS}",
+            f"{vectraxdr_config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_GET_ASSIGNMENTS}",
             status_code=200,
-            headers=config.DEFAULT_HEADERS,
+            headers=vectraxdr_config.DEFAULT_HEADERS,
             json=vectra_responses.GET_ASSIGNMENT_ON_POLL
         )
 
         mock_get.get(
-            f"{config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_DETECTIONS_ENDPOINT}",
+            f"{vectraxdr_config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_DETECTIONS_ENDPOINT}",
             status_code=200,
-            headers=config.DEFAULT_HEADERS,
+            headers=vectraxdr_config.DEFAULT_HEADERS,
             json=vectra_responses.GET_DETECTION_ON_POLL
         )
 
@@ -94,14 +94,14 @@ class TestOnPollAction(unittest.TestCase):
         Token is available in the state file.
         Mock the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
 
         self.test_json.get('config').update({"on_poll_start_time": "2023-05-24T14:13:34",
                                              "is_entity_prioritized": 'true', "entity_type": 'invalid',
                                              "entity_tags": "test1,test2", "detection_category": "Command and Control",
                                              "detection_type": "test2", "urgency_score_medium_threshold": 50,
                                              "urgency_score_low_threshold": 30})
-        self.test_json.update({"user_session_token": config.get_session_id(self.connector)})
+        self.test_json.update({"user_session_token": vectraxdr_config.get_session_id(self.connector)})
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
@@ -119,7 +119,7 @@ class TestOnPollAction(unittest.TestCase):
                                              "is_entity_prioritized": 'all', "entity_type": 'all',
                                              "entity_tags": "test1,test2", "detection_category": "invalid",
                                              "detection_type": "test2"})
-        self.test_json.update({"user_session_token": config.get_session_id(self.connector)})
+        self.test_json.update({"user_session_token": vectraxdr_config.get_session_id(self.connector)})
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)

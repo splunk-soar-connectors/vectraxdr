@@ -28,7 +28,7 @@ from unittest.mock import patch
 
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config, vectra_responses
+from . import vectraxdr_config, vectra_responses
 
 
 class AddTagsAction(unittest.TestCase):
@@ -38,7 +38,7 @@ class AddTagsAction(unittest.TestCase):
         """Set up method for the tests."""
         self.connector = VectraxdrConnector()
         self.test_json = dict()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(vectraxdr_config.TEST_JSON)
         self.test_json.update({"action": "add tags", "identifier": "add_tags"})
 
         return super().setUp()
@@ -51,15 +51,15 @@ class AddTagsAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_id': 212, "entity_type": "host", "tags_list": "tag2,tag3"}]
 
         mock_get.return_value.status_code = 200
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = vectra_responses.GET_TAG
 
         mock_patch.return_value.status_code = 200
-        mock_patch.return_value.headers = config.DEFAULT_HEADERS
+        mock_patch.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_patch.return_value.json.return_value = vectra_responses.PATCH_TAG
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -76,11 +76,11 @@ class AddTagsAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_id': 21123445552, "entity_type": "host", "tags_list": "tag2,tag3"}]
 
         mock_get.return_value.status_code = 404
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = vectra_responses.TAG_INVALID_ENTITY_ID
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -96,7 +96,7 @@ class AddTagsAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_type': "account_not_present", 'entity_id': 1, "tags_list": "tag2,tag3"}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -112,7 +112,7 @@ class AddTagsAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_type': "account", 'entity_id': 10, "tags_list": ",,,,"}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)

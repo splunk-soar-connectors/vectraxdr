@@ -28,7 +28,7 @@ from unittest.mock import patch
 
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config, vectra_responses
+from . import vectraxdr_config, vectra_responses
 
 
 class DescribeEntityAction(unittest.TestCase):
@@ -37,7 +37,7 @@ class DescribeEntityAction(unittest.TestCase):
     def setUp(self):
         """Set up method for the tests."""
         self.connector = VectraxdrConnector()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(vectraxdr_config.TEST_JSON)
         self.test_json.update({"action": "describe entity", "identifier": "describe_entity"})
 
         return super().setUp()
@@ -49,11 +49,11 @@ class DescribeEntityAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_type': "account", 'entity_id': 1}]
 
         mock_get.return_value.status_code = 200
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = vectra_responses.GET_ENTITY
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -69,7 +69,7 @@ class DescribeEntityAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_type': "account_not_present", 'entity_id': 1}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -86,11 +86,11 @@ class DescribeEntityAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_type': "account", 'entity_id': 0}]
 
         mock_get.return_value.status_code = 404
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = vectra_responses.NOT_EXISTS_ENTITY
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)

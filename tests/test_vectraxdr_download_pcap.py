@@ -31,7 +31,7 @@ import requests_mock
 import vectraxdr_consts as consts
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config
+from . import vectraxdr_config
 
 
 class DownloadPCAPAction(unittest.TestCase):
@@ -41,7 +41,7 @@ class DownloadPCAPAction(unittest.TestCase):
         """Set up method for the tests."""
         self.connector = VectraxdrConnector()
         self.test_json = dict()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(vectraxdr_config.TEST_JSON)
         self.test_json.update({"action": "download pcap", "identifier": "download_pcap"})
         self.file_to_zip = "testlogfile.pcap"
 
@@ -61,9 +61,9 @@ class DownloadPCAPAction(unittest.TestCase):
         Patch the get() to return the valid response.
         """
         # Define the side_effect function
-        config.set_state_file(Token=True)
-        self.test_json.update({"user_session_token": config.get_session_id(self.connector)})
-        self.test_json.update({"container_id": config.create_container(self.connector)})
+        vectraxdr_config.set_state_file(Token=True)
+        self.test_json.update({"user_session_token": vectraxdr_config.get_session_id(self.connector)})
+        self.test_json.update({"container_id": vectraxdr_config.create_container(self.connector)})
         self.test_json['parameters'] = [{'detection_id': 10}]
         with open(self.file_to_zip, "wb") as f:
             f.write(b"Test log data")

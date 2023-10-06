@@ -1,4 +1,3 @@
-"""Connector class."""
 # File: vectraxdr_connector.py
 #
 # Copyright (c) 2023 Vectra

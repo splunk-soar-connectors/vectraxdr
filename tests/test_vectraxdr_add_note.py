@@ -28,7 +28,7 @@ from unittest.mock import patch
 
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config, vectra_responses
+from . import vectraxdr_config, vectra_responses
 
 
 class AddNoteAction(unittest.TestCase):
@@ -38,7 +38,7 @@ class AddNoteAction(unittest.TestCase):
         """Set up method for the tests."""
         self.connector = VectraxdrConnector()
         self.test_json = dict()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(vectraxdr_config.TEST_JSON)
         self.test_json.update({"action": "add note", "identifier": "add_note"})
 
         return super().setUp()
@@ -50,11 +50,11 @@ class AddNoteAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_id': 212, "entity_type": "host", "note": "test note"}]
 
         mock_post.return_value.status_code = 200
-        mock_post.return_value.headers = config.DEFAULT_HEADERS
+        mock_post.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = vectra_responses.CREATE_NOTE_RESP
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -71,11 +71,11 @@ class AddNoteAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_id': 21123445552, "entity_type": "host", "note": "test note"}]
 
         mock_post.return_value.status_code = 404
-        mock_post.return_value.headers = {"Content-Type": config.CONTENT_HTML_TYPE}
+        mock_post.return_value.headers = {"Content-Type": vectraxdr_config.CONTENT_HTML_TYPE}
         mock_post.return_value.json.return_value = ""
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -91,7 +91,7 @@ class AddNoteAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_type': "account_not_present", 'entity_id': 1, "note": "test note"}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)

@@ -28,7 +28,7 @@ from unittest.mock import patch
 
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config, vectra_responses
+from . import vectraxdr_config, vectra_responses
 
 
 class AddAssignmentAction(unittest.TestCase):
@@ -38,7 +38,7 @@ class AddAssignmentAction(unittest.TestCase):
         """Set up method for the tests."""
         self.connector = VectraxdrConnector()
         self.test_json = dict()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(vectraxdr_config.TEST_JSON)
         self.test_json.update({"action": "add assignment", "identifier": "add_assignment"})
 
         return super().setUp()
@@ -50,11 +50,11 @@ class AddAssignmentAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_id': 212, "entity_type": "host", "user_id": 59}]
 
         mock_post.return_value.status_code = 201
-        mock_post.return_value.headers = config.DEFAULT_HEADERS
+        mock_post.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = vectra_responses.ADD_UPDATE_ASSIGNMENT_RESP
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -71,11 +71,11 @@ class AddAssignmentAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_id': 21112, "entity_type": "host", "user_id": 59}]
 
         mock_post.return_value.status_code = 400
-        mock_post.return_value.headers = config.DEFAULT_HEADERS
+        mock_post.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = vectra_responses.ADD_ASSIGNMENT_INVALID_ENTITY_ID_RESP
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -92,11 +92,11 @@ class AddAssignmentAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_id': 212, "entity_type": "host", "user_id": 55555559}]
 
         mock_post.return_value.status_code = 400
-        mock_post.return_value.headers = config.DEFAULT_HEADERS
+        mock_post.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = vectra_responses.ADD_ASSIGNMENT_INVALID_USER_ID_RESP
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -112,7 +112,7 @@ class AddAssignmentAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'entity_id': 212, "entity_type": "account_not_present", "user_id": 59}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)

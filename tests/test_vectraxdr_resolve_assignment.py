@@ -28,7 +28,7 @@ from unittest.mock import patch
 
 from vectraxdr_connector import VectraxdrConnector
 
-from . import config, vectra_responses
+from . import vectraxdr_config, vectra_responses
 
 
 class ResolveAssignmentAction(unittest.TestCase):
@@ -38,7 +38,7 @@ class ResolveAssignmentAction(unittest.TestCase):
         """Set up method for the tests."""
         self.connector = VectraxdrConnector()
         self.test_json = dict()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(vectraxdr_config.TEST_JSON)
         self.test_json.update({"action": "resolve assignment", "identifier": "resolve_assignment"})
 
         return super().setUp()
@@ -51,16 +51,16 @@ class ResolveAssignmentAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'assignment_id': 212, "outcome": "Benign True Positive",
                                          "note": "Test Note", "triage_as": "Test", "detection_ids": "1000,1001"}]
 
         mock_get.return_value.status_code = 200
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = vectra_responses.OUTCOMES_VALID
 
         mock_put.return_value.status_code = 200
-        mock_put.return_value.headers = config.DEFAULT_HEADERS
+        mock_put.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_put.return_value.json.return_value = vectra_responses.RESOLVE_ASSIGNMENT_RESP
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -78,16 +78,16 @@ class ResolveAssignmentAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'assignment_id': 21112, "outcome": "Benign True Positive",
                                          "note": "Test Note", "triage_as": "Test", "detection_ids": "1000,1001"}]
 
         mock_get.return_value.status_code = 200
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = vectra_responses.OUTCOMES_VALID
 
         mock_put.return_value.status_code = 404
-        mock_put.return_value.headers = config.DEFAULT_HEADERS
+        mock_put.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_put.return_value.json.return_value = vectra_responses.NOT_FOUND_RESP
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -105,16 +105,16 @@ class ResolveAssignmentAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'assignment_id': 212, "outcome": "False True",
                                          "note": "Test Note", "triage_as": "Test", "detection_ids": "1000,1001"}]
 
         mock_get.return_value.status_code = 200
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = vectra_responses.OUTCOMES_VALID
 
         mock_put.return_value.status_code = 400
-        mock_put.return_value.headers = config.DEFAULT_HEADERS
+        mock_put.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_put.return_value.json.return_value = vectra_responses.ADD_ASSIGNMENT_INVALID_USER_ID_RESP
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -132,16 +132,16 @@ class ResolveAssignmentAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'assignment_id': 212, "outcome": "Benign True Positive",
                                          "note": "Test Note", "triage_as": "Test", "detection_ids": "detection1, detection2"}]
 
         mock_get.return_value.status_code = 200
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = vectra_responses.OUTCOMES_VALID
 
         mock_put.return_value.status_code = 400
-        mock_put.return_value.headers = config.DEFAULT_HEADERS
+        mock_put.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_put.return_value.json.return_value = vectra_responses.ADD_ASSIGNMENT_INVALID_USER_ID_RESP
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -159,16 +159,16 @@ class ResolveAssignmentAction(unittest.TestCase):
         Token is available in the state file.
         Patch the get() to return the valid response.
         """
-        config.set_state_file(Token=True)
+        vectraxdr_config.set_state_file(Token=True)
         self.test_json['parameters'] = [{'assignment_id': 212, "outcome": "Benign True Positive",
                                          "note": "Test Note", "triage_as": "Test", "detection_ids": "12345, 67890"}]
 
         mock_get.return_value.status_code = 200
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = vectra_responses.OUTCOMES_VALID
 
         mock_put.return_value.status_code = 400
-        mock_put.return_value.headers = config.DEFAULT_HEADERS
+        mock_put.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         mock_put.return_value.json.return_value = vectra_responses.DETECTION_ID_NOT_EXIST
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)

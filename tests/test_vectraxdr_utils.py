@@ -31,7 +31,7 @@ from phantom.action_result import ActionResult
 
 from vectraxdr_utils import RetVal, VectraxdrUtils
 
-from . import config
+from . import vectraxdr_config
 
 
 class TestRetValClass(unittest.TestCase):
@@ -93,7 +93,7 @@ class TestEncryptionMethod(unittest.TestCase):
         """Set up method for the tests."""
         connector = Mock()
         connector.get_app_json.return_value = {"app_version": "1.0.0"}
-        connector.get_asset_id.return_value = config.DEFAULT_ASSET_ID
+        connector.get_asset_id.return_value = vectraxdr_config.DEFAULT_ASSET_ID
         connector.error_print.return_value = None
         self.util = VectraxdrUtils(connector)
         return super().setUp()
@@ -101,15 +101,15 @@ class TestEncryptionMethod(unittest.TestCase):
     @parameterized.expand(
         [
             ["token1", {'token': {
-                'access_token': config.TOKEN_DUMMY_ACCESS_TOKEN_1,
-                'refresh_token': config.TOKEN_DUMMY_REFRESH_TOKEN_1,
+                'access_token': vectraxdr_config.TOKEN_DUMMY_ACCESS_TOKEN_1,
+                'refresh_token': vectraxdr_config.TOKEN_DUMMY_REFRESH_TOKEN_1,
                 'expire': 12345
-            }}, config.TOKEN_DUMMY_ACCESS_CIPHER_1],
+            }}, vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_1],
             ["token2", {'token': {
-                'access_token': config.TOKEN_DUMMY_ACCESS_TOKEN_2,
-                'refresh_token': config.TOKEN_DUMMY_REFRESH_TOKEN_2,
+                'access_token': vectraxdr_config.TOKEN_DUMMY_ACCESS_TOKEN_2,
+                'refresh_token': vectraxdr_config.TOKEN_DUMMY_REFRESH_TOKEN_2,
                 'expire': 67891
-            }}, config.TOKEN_DUMMY_REFRESH_CIPHER_2],
+            }}, vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_2],
             ["no_token", {'app_version': '1.0.0'}, {}],
         ]
     )
@@ -126,15 +126,15 @@ class TestEncryptionMethod(unittest.TestCase):
     @parameterized.expand(
         [
             ["token1", {'token': {
-                'access_token': config.TOKEN_DUMMY_ACCESS_CIPHER_1,
-                'refresh_token': config.TOKEN_DUMMY_REFRESH_CIPHER_1,
+                'access_token': vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_1,
+                'refresh_token': vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_1,
                 'expire': 12345
-            }}, config.TOKEN_DUMMY_ACCESS_TOKEN_1],
+            }}, vectraxdr_config.TOKEN_DUMMY_ACCESS_TOKEN_1],
             ["token2", {'token': {
-                'access_token': config.TOKEN_DUMMY_ACCESS_CIPHER_2,
-                'refresh_token': config.TOKEN_DUMMY_REFRESH_CIPHER_2,
+                'access_token': vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_2,
+                'refresh_token': vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_2,
                 'expire': 12345
-            }}, config.TOKEN_DUMMY_REFRESH_TOKEN_2],
+            }}, vectraxdr_config.TOKEN_DUMMY_REFRESH_TOKEN_2],
             ["no_token", {'app_version': '1.0.0'}, {}],
         ]
     )
@@ -156,8 +156,8 @@ class TestEncryptionMethod(unittest.TestCase):
         output = self.util._encrypt_state(
             {
                 'token': {
-                    'access_token': config.TOKEN_DUMMY_ACCESS_CIPHER_1,
-                    'refresh_token': config.TOKEN_DUMMY_REFRESH_CIPHER_1,
+                    'access_token': vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_1,
+                    'refresh_token': vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_1,
                     'expire': 123456
                 }
             }
@@ -172,8 +172,8 @@ class TestEncryptionMethod(unittest.TestCase):
         output = self.util._decrypt_state(
             {
                 'token': {
-                    'access_token': config.TOKEN_DUMMY_ACCESS_CIPHER_1,
-                    'refresh_token': config.TOKEN_DUMMY_REFRESH_CIPHER_1,
+                    'access_token': vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_1,
+                    'refresh_token': vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_1,
                     'expire': 123456
                 }
             }
@@ -405,7 +405,7 @@ class TestGenerateAccessToken(unittest.TestCase):
         """Test the pass and fail cases of generate token method."""
         mock_post.return_value.status_code = mock_code
         mock_post.return_value.json.return_value = mock_response
-        mock_post.return_value.headers = config.DEFAULT_HEADERS
+        mock_post.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         status = self.util._generate_access_token(self.action_result)
         self.assertEqual(status, expected_status)
         self.assertEqual(self.action_result.get_message(), expected_message)
@@ -451,7 +451,7 @@ class TestGenerateRefreshToken(unittest.TestCase):
         """Test the pass and fail cases of generate token method."""
         mock_post.return_value.status_code = mock_code
         mock_post.return_value.json.return_value = mock_response
-        mock_post.return_value.headers = config.DEFAULT_HEADERS
+        mock_post.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
         status = self.util._generate_refresh_token(self.action_result)
         self.assertEqual(status, expected_status)
         self.assertEqual(self.action_result.get_message(), expected_message)

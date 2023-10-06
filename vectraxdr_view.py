@@ -1,4 +1,3 @@
-"""Class for connector's view methods."""
 # File: vectraxdr_view.py
 #
 # Copyright (c) 2023 Vectra

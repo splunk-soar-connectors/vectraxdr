@@ -1,5 +1,5 @@
 """Config file."""
-# File: config.py
+# File: vectraxdr_config.py
 #
 # Copyright (c) 2023 Vectra
 #

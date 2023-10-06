@@ -1,4 +1,3 @@
-"""Class for connector's constants."""
 # File: vectraxdr_consts.py
 #
 # Copyright (c) 2023 Vectra
