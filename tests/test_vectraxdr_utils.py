@@ -1,5 +1,5 @@
 """Unit test file for utils."""
-# File: vectraxdr_utils.py
+# File: test_vectraxdr_utils.py
 #
 # Copyright (c) 2023 Vectra
 #
