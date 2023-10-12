@@ -1,6 +1,6 @@
 # File: vectraxdr_consts.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) Vectra, 2023
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and

@@ -1,7 +1,7 @@
 """__init__ file."""
 # File: __init__.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) Vectra, 2023
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
