@@ -1,7 +1,7 @@
 """Unit test file for update assignment."""
 # File: test_vectraxdr_update_assignment.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -20,7 +20,6 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
-
 
 import json
 import unittest
@@ -51,7 +50,7 @@ class UpdateAssignmentAction(unittest.TestCase):
         Patch the get() to return the valid response.
         """
         vectraxdr_config.set_state_file(Token=True)
-        self.test_json['parameters'] = [{'assignment_id': 212, "user_id": 59}]
+        self.test_json["parameters"] = [{"assignment_id": 212, "user_id": 59}]
 
         mock_put.return_value.status_code = 201
         mock_put.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
@@ -72,7 +71,7 @@ class UpdateAssignmentAction(unittest.TestCase):
         Patch the get() to return the valid response.
         """
         vectraxdr_config.set_state_file(Token=True)
-        self.test_json['parameters'] = [{'assignment_id': 21112, "user_id": 59}]
+        self.test_json["parameters"] = [{"assignment_id": 21112, "user_id": 59}]
 
         mock_put.return_value.status_code = 400
         mock_put.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
@@ -93,7 +92,7 @@ class UpdateAssignmentAction(unittest.TestCase):
         Patch the get() to return the valid response.
         """
         vectraxdr_config.set_state_file(Token=True)
-        self.test_json['parameters'] = [{'assignment_id': 212, "user_id": 55555559}]
+        self.test_json["parameters"] = [{"assignment_id": 212, "user_id": 55555559}]
 
         mock_put.return_value.status_code = 400
         mock_put.return_value.headers = vectraxdr_config.DEFAULT_HEADERS

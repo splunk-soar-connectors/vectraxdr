@@ -1,7 +1,8 @@
 """Class for Test connectivity action."""
+
 # File: vectraxdr_test_connectivity.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -38,9 +39,8 @@ class TestConnectivityAction(BaseAction):
             return self._action_result.get_status()
 
         self._connector.save_progress("Getting list of entities")
-        url = f'{consts.VECTRA_API_VERSION}{consts.VECTRA_LIST_ENTITIES}'
-        ret_val, _ = self._connector.util._make_rest_call_helper(
-            url, self._action_result, params={'page_size': 1})
+        url = f"{consts.VECTRA_API_VERSION}{consts.VECTRA_LIST_ENTITIES}"
+        ret_val, _ = self._connector.util._make_rest_call_helper(url, self._action_result, params={"page_size": 1})
         if phantom.is_fail(ret_val):
             self._connector.save_progress(consts.VECTRA_ERROR_TEST_CONNECTIVITY)
             return self._action_result.get_status()

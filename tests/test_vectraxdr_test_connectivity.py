@@ -1,7 +1,7 @@
 """Unit test file for test connectivity."""
 # File: test_vectraxdr_test_connectivity.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -20,7 +20,6 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
-
 
 import json
 import unittest
@@ -60,13 +59,13 @@ class TestConnectivityAction(unittest.TestCase):
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['status'], 'success')
+        self.assertEqual(ret_val["status"], "success")
 
         mock_post.assert_called_with(
             f"{vectraxdr_config.DUMMY_BASE_URL}{consts.VECTRA_ENDPOINT_TOKEN}",
             headers=vectraxdr_config.TOKEN_HEADER,
             data={"grant_type": "client_credentials"},
-            auth=('<client_id>', '<dummy_client_secret>'),
+            auth=("<client_id>", "<dummy_client_secret>"),
             timeout=consts.VECTRA_REQUEST_TIMEOUT,
             params=None,
             verify=False,
@@ -75,7 +74,7 @@ class TestConnectivityAction(unittest.TestCase):
         mock_get.assert_called_with(
             f"{vectraxdr_config.DUMMY_BASE_URL}{consts.VECTRA_API_VERSION}{consts.VECTRA_LIST_ENTITIES}",
             headers=vectraxdr_config.ACTION_HEADER,
-            params={'page_size': 1},
+            params={"page_size": 1},
             timeout=consts.VECTRA_REQUEST_TIMEOUT,
             verify=False,
         )
@@ -92,13 +91,13 @@ class TestConnectivityAction(unittest.TestCase):
         mock_post.return_value.json.return_value = {"error": "Authentication Error. Please try reauthenticating using API client credentials."}
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["status"], "failed")
 
         mock_post.assert_called_with(
             f"{vectraxdr_config.DUMMY_BASE_URL}{consts.VECTRA_ENDPOINT_TOKEN}",
             headers=vectraxdr_config.TOKEN_HEADER,
             data={"grant_type": "client_credentials"},
-            auth=('<client_id>', '<dummy_client_secret>'),
+            auth=("<client_id>", "<dummy_client_secret>"),
             timeout=consts.VECTRA_REQUEST_TIMEOUT,
             params=None,
             verify=False,

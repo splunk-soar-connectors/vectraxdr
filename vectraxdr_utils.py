@@ -1,6 +1,6 @@
 # File: vectraxdr_utils.py
 #
-# Copyright (c) Vectra, 2023
+# Copyright (c) Vectra, 2023-2025
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -44,7 +44,7 @@ class RetVal(tuple):
         return tuple.__new__(RetVal, (val1, val2))
 
 
-class VectraxdrUtils(object):
+class VectraxdrUtils:
     """This class holds all the util methods."""
 
     def __init__(self, connector=None):
@@ -79,7 +79,7 @@ class VectraxdrUtils(object):
                 elif len(e.args) == 1:
                     error_message = e.args[0]
         except Exception as e:
-            self._connector.error_print(f"Error occurred while fetching exception information. Details: {str(e)}")
+            self._connector.error_print(f"Error occurred while fetching exception information. Details: {e!s}")
 
         if not error_code:
             error_text = f"Error message: {error_message}"
@@ -124,11 +124,7 @@ class VectraxdrUtils(object):
         if response.status_code in consts.VECTRA_EMPTY_RESPONSE_STATUS_CODE:
             return RetVal(phantom.APP_SUCCESS, {})
 
-        return RetVal(
-            action_result.set_status(
-                phantom.APP_ERROR, consts.VECTRA_ERROR_EMPTY_RESPONSE.format(response.status_code)
-            )
-        )
+        return RetVal(action_result.set_status(phantom.APP_ERROR, consts.VECTRA_ERROR_EMPTY_RESPONSE.format(response.status_code)))
 
     def _process_html_response(self, response, action_result):
         """Process the html response returned from the server.
@@ -169,11 +165,7 @@ class VectraxdrUtils(object):
             resp_json = response.json()
         except Exception as e:
             error_message = self._get_error_message_from_exception(e)
-            return RetVal(
-                action_result.set_status(
-                    phantom.APP_ERROR, consts.VECTRA_ERROR_JSON_RESPONSE.format(error_message)
-                )
-            )
+            return RetVal(action_result.set_status(phantom.APP_ERROR, consts.VECTRA_ERROR_JSON_RESPONSE.format(error_message)))
 
         if 200 <= response.status_code < 399:
             return RetVal(phantom.APP_SUCCESS, resp_json)
@@ -184,39 +176,43 @@ class VectraxdrUtils(object):
 
     def _process_pcap_response(self, response, action_result):
         guid = uuid.uuid4()
-        if hasattr(Vault, 'get_vault_tmp_dir'):
-            vault_tmp_dir = Vault.get_vault_tmp_dir().rstrip('/')
-            local_dir = '{}/{}'.format(vault_tmp_dir, guid)
+        if hasattr(Vault, "get_vault_tmp_dir"):
+            vault_tmp_dir = Vault.get_vault_tmp_dir().rstrip("/")
+            local_dir = f"{vault_tmp_dir}/{guid}"
         else:
-            local_dir = '/opt/phantom/vault/tmp/{}'.format(guid)
+            local_dir = f"/opt/phantom/vault/tmp/{guid}"
 
-        self._connector.save_progress("Using temp directory: {0}".format(local_dir))
+        self._connector.save_progress(f"Using temp directory: {local_dir}")
 
         try:
             os.makedirs(local_dir)
         except Exception as e:
             return action_result.set_status(
-                phantom.APP_ERROR, "Unable to create temporary vault folder.", self._get_error_message_from_exception(e))
+                phantom.APP_ERROR, "Unable to create temporary vault folder.", self._get_error_message_from_exception(e)
+            )
 
         response_headers = response.headers
         filename = response_headers["Content-Disposition"].split("filename=")[-1]
-        filename = filename.replace("\"", "")
-        file_path = "{}/{}".format(local_dir, filename)
+        filename = filename.replace('"', "")
+        file_path = f"{local_dir}/{filename}"
         self.file_path = file_path
 
         try:
-            with open(file_path, 'wb') as f:
+            with open(file_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=5 * 1024 * 1024):
                     f.write(chunk)
         except Exception as e:
-            return RetVal(action_result.set_status(
-                phantom.APP_ERROR, "Unable to write file to disk. Error: {0}".format(self._get_error_message_from_exception(e))), None)
+            return RetVal(
+                action_result.set_status(phantom.APP_ERROR, f"Unable to write file to disk. Error: {self._get_error_message_from_exception(e)}"),
+                None,
+            )
 
         if 200 <= response.status_code <= 399:
             return RetVal(phantom.APP_SUCCESS, None)
 
-        message = "Error from server. Status Code: {0} Data from server: {1}".format(
-            response.status_code, response.text.replace('{', '{{').replace('}', '}}'))
+        message = "Error from server. Status Code: {} Data from server: {}".format(
+            response.status_code, response.text.replace("{", "{{").replace("}", "}}")
+        )
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -244,7 +240,7 @@ class VectraxdrUtils(object):
         if "html" in response.headers.get("Content-Type", ""):
             return self._process_html_response(response, action_result)
 
-        if 'force-download' in response.headers.get('Content-Type', ''):
+        if "force-download" in response.headers.get("Content-Type", ""):
             return self._process_pcap_response(response, action_result)
 
         # Process each 'Content-Type' of response separately
@@ -255,10 +251,9 @@ class VectraxdrUtils(object):
             return self._process_empty_response(response, action_result)
 
         # everything else is actually an error at this point
-        message = "Can't process response from server. {}".format(consts.VECTRA_ERROR_GENERAL_MESSAGE.format(
-            response.status_code,
-            response.text.replace("{", "{{").replace("}", "}}")
-        ))
+        message = "Can't process response from server. {}".format(
+            consts.VECTRA_ERROR_GENERAL_MESSAGE.format(response.status_code, response.text.replace("{", "{{").replace("}", "}}"))
+        )
 
         # Large HTML pages may be returned incase of 500 error from server.
         # Use default error message in place of large HTML page.
@@ -282,14 +277,14 @@ class VectraxdrUtils(object):
         except AttributeError:
             return RetVal(action_result.set_status(phantom.APP_ERROR, f"Invalid method: {method}"))
 
-        is_stream_download = kwargs.pop('is_stream_download', False)
+        is_stream_download = kwargs.pop("is_stream_download", False)
         # Create a URL to connect to
-        next_page_url = kwargs.pop('next_page_url', None)
-        url = next_page_url or f'{self._connector.config.get("base_url").rstrip("/")}{endpoint}'
+        next_page_url = kwargs.pop("next_page_url", None)
+        url = next_page_url or f"{self._connector.config.get('base_url').rstrip('/')}{endpoint}"
 
         no_of_retries = consts.VECTRA_NO_OF_RETRIES
 
-        user_agent = "VectraXDR-SplunkSOAR-{}".format(self._connector.get_app_json().get('app_version'))
+        user_agent = "VectraXDR-SplunkSOAR-{}".format(self._connector.get_app_json().get("app_version"))
         headers.update({"User-agent": user_agent})
 
         while no_of_retries:
@@ -301,21 +296,17 @@ class VectraxdrUtils(object):
                     params=params,
                     verify=self._connector.config.get("verify_server_cert", False),
                     stream=is_stream_download,
-                    **kwargs
+                    **kwargs,
                 )
             except Exception as e:
                 error_message = self._get_error_message_from_exception(e)
-                return RetVal(
-                    action_result.set_status(
-                        phantom.APP_ERROR, consts.VECTRA_ERROR_REST_CALL.format(error_message)
-                    )
-                )
+                return RetVal(action_result.set_status(phantom.APP_ERROR, consts.VECTRA_ERROR_REST_CALL.format(error_message)))
 
             if response.status_code not in [429, 500]:
                 break
 
             self._connector.save_progress(f"Received {response.status_code} status code from the server")
-            self._connector.save_progress("Retrying after {} second(s)...".format(consts.VECTRA_WAIT_TIME_FOR_RETRY))
+            self._connector.save_progress(f"Retrying after {consts.VECTRA_WAIT_TIME_FOR_RETRY} second(s)...")
             time.sleep(consts.VECTRA_WAIT_TIME_FOR_RETRY)
             no_of_retries -= 1
 
@@ -327,17 +318,12 @@ class VectraxdrUtils(object):
         :param action_result: Action result or BaseConnector object
         :returns: phantom.APP_SUCCESS/phantom.APP_ERROR
         """
-        headers = {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept": "application/json"
-        }
+        headers = {"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json"}
 
         self._connector.debug_print("Generating access token")
-        data = {"grant_type": "refresh_token",
-                "refresh_token": self._refresh_token}
+        data = {"grant_type": "refresh_token", "refresh_token": self._refresh_token}
 
-        ret_val, resp_json = self._make_rest_call(
-            consts.VECTRA_ENDPOINT_TOKEN, action_result, data=data, method="post", headers=headers)
+        ret_val, resp_json = self._make_rest_call(consts.VECTRA_ENDPOINT_TOKEN, action_result, data=data, method="post", headers=headers)
 
         if phantom.is_fail(ret_val):
             self._connector.state.get(consts.VECTRA_STATE_TOKEN, {}).pop(consts.VECTRA_STATE_ACCESS_TOKEN, None)
@@ -361,17 +347,14 @@ class VectraxdrUtils(object):
         :param action_result: Action result or BaseConnector object
         :returns: phantom.APP_SUCCESS/phantom.APP_ERROR
         """
-        headers = {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept": "application/json"
-        }
+        headers = {"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json"}
 
         self._connector.debug_print("Generating both tokens")
         data = {"grant_type": "client_credentials"}
-        creds = (self._connector.config["client_id"],
-                 self._connector.config["client_secret"])
+        creds = (self._connector.config["client_id"], self._connector.config["client_secret"])
         ret_val, resp_json = self._make_rest_call(
-            consts.VECTRA_ENDPOINT_TOKEN, action_result, data=data, method="post", headers=headers, auth=creds)
+            consts.VECTRA_ENDPOINT_TOKEN, action_result, data=data, method="post", headers=headers, auth=creds
+        )
 
         if phantom.is_fail(ret_val):
             self._connector.state.pop(consts.VECTRA_STATE_TOKEN, None)
@@ -388,7 +371,7 @@ class VectraxdrUtils(object):
 
         self._connector.state[consts.VECTRA_STATE_TOKEN] = {
             consts.VECTRA_STATE_ACCESS_TOKEN: resp_json[consts.VECTRA_STATE_ACCESS_TOKEN],
-            consts.VECTRA_STATE_REFRESH_TOKEN: resp_json[consts.VECTRA_STATE_REFRESH_TOKEN]
+            consts.VECTRA_STATE_REFRESH_TOKEN: resp_json[consts.VECTRA_STATE_REFRESH_TOKEN],
         }
         self._connector.debug_print("Tokens have been generated successfully")
 
@@ -410,8 +393,7 @@ class VectraxdrUtils(object):
         if self._access_token:
             headers.update({"Authorization": f"Bearer {self._access_token}"})
 
-        ret_val, resp_json = self._make_rest_call(
-            endpoint, action_result, method, headers=headers, params=params, **kwargs)
+        ret_val, resp_json = self._make_rest_call(endpoint, action_result, method, headers=headers, params=params, **kwargs)
 
         if phantom.is_fail(ret_val):
             # If token is expired, generate a new token
@@ -441,9 +423,8 @@ class VectraxdrUtils(object):
                 if phantom.is_fail(ret_val):
                     return RetVal(action_result.get_status())
 
-            headers.update({'Authorization': 'Bearer {0}'.format(self._access_token)})
-            ret_val, resp_json = self._make_rest_call(
-                endpoint, action_result, method, headers=headers, params=params, **kwargs)
+            headers.update({"Authorization": f"Bearer {self._access_token}"})
+            ret_val, resp_json = self._make_rest_call(endpoint, action_result, method, headers=headers, params=params, **kwargs)
         if phantom.is_fail(ret_val):
             return RetVal(action_result.get_status())
 
@@ -483,10 +464,12 @@ class VectraxdrUtils(object):
         try:
             if access_token:
                 state[consts.VECTRA_STATE_TOKEN][consts.VECTRA_STATE_ACCESS_TOKEN] = encryption_helper.decrypt(
-                    access_token, self._connector.get_asset_id())
+                    access_token, self._connector.get_asset_id()
+                )
             if refresh_token:
                 state[consts.VECTRA_STATE_TOKEN][consts.VECTRA_STATE_REFRESH_TOKEN] = encryption_helper.decrypt(
-                    refresh_token, self._connector.get_asset_id())
+                    refresh_token, self._connector.get_asset_id()
+                )
         except Exception as e:
             self._connector.debug_print("Error occurred while decrypting the state file.", e)
             state.pop(consts.VECTRA_STATE_TOKEN, None)
@@ -505,7 +488,7 @@ class VectraxdrUtils(object):
         """
         date_dt = dateparser.parse(datetime)
         if date_dt is None:
-            raise Exception(f'Unable to parse {datetime}')
+            raise Exception(f"Unable to parse {datetime}")
         datetime = date_dt.strftime(consts.VECTRA_LAST_MODIFIED_TIMESTAMP_FORMAT)
         datetime = dateparser.parse(datetime)
 
@@ -548,8 +531,8 @@ class VectraxdrUtils(object):
                 return action_result.set_status(phantom.APP_ERROR, msg)
         except Exception as e:
             err_txt = self._get_error_message_from_exception(e)
-            message = "Invalid date string received for 'Start time for on poll' parameter. Error\
-                  occurred while checking date format. Error: {}".format(err_txt)
+            message = f"Invalid date string received for 'Start time for on poll' parameter. Error\
+                  occurred while checking date format. Error: {err_txt}"
             return action_result.set_status(phantom.APP_ERROR, message)
         return phantom.APP_SUCCESS
 
@@ -559,30 +542,23 @@ class VectraxdrUtils(object):
         else:
             ids_list = [id.strip() for id in ids.split(",") if id.strip()]
         if not ids_list and required:  # If required param
-            return action_result.set_status(
-                phantom.APP_ERROR, "Please provide a valid value in the '{param}' action parameter".format(param=param)), None
+            return action_result.set_status(phantom.APP_ERROR, f"Please provide a valid value in the '{param}' action parameter"), None
         return phantom.APP_SUCCESS, ids_list
 
     def _mark_detection(self, action_result, detection_ids, mark="True"):
-
         url = f"{consts.VECTRA_API_VERSION}{consts.VECTRA_DETECTIONS_ENDPOINT}"
         payload = {"detectionIdList": detection_ids, "mark_as_fixed": mark}
 
-        ret_val, response = self._make_rest_call_helper(
-            url, action_result, "patch", json=payload
-        )
+        ret_val, response = self._make_rest_call_helper(url, action_result, "patch", json=payload)
         if phantom.is_fail(ret_val):
             return action_result.get_status(), None
 
         return phantom.APP_SUCCESS, response
 
     def _get_entity(self, action_result, entity_id, entity_type):
-
-        entity_url = f'{consts.VECTRA_API_VERSION}{consts.VECTRA_DESCRIBE_ENTITY.format(entity_id=entity_id)}'
-        params = {'type': entity_type}
-        ret_val, response = self._make_rest_call_helper(
-            entity_url, action_result, params=params
-        )
+        entity_url = f"{consts.VECTRA_API_VERSION}{consts.VECTRA_DESCRIBE_ENTITY.format(entity_id=entity_id)}"
+        params = {"type": entity_type}
+        ret_val, response = self._make_rest_call_helper(entity_url, action_result, params=params)
         if phantom.is_fail(ret_val):
             return action_result.get_status(), None
 
@@ -617,16 +593,13 @@ class VectraxdrUtils(object):
             return action_result.set_status(phantom.APP_SUCCESS), str(outcomes_map[outcome])
 
         return action_result.set_status(
-            phantom.APP_ERROR, "Invalid outcome has been provided. Please provide valid outcome value from {}".format(
-                list(outcomes_map.keys()))), None
+            phantom.APP_ERROR, f"Invalid outcome has been provided. Please provide valid outcome value from {list(outcomes_map.keys())}"
+        ), None
 
     def _get_entity_related_tags(self, action_result, entity_id, entity_type):
-
-        url = f'{consts.VECTRA_API_VERSION}{consts.VECTRA_TAG_ENDPOINT.format(entity_id=entity_id)}'
-        params = {'type': entity_type}
-        ret_val, response = self._make_rest_call_helper(
-            url, action_result, params=params
-        )
+        url = f"{consts.VECTRA_API_VERSION}{consts.VECTRA_TAG_ENDPOINT.format(entity_id=entity_id)}"
+        params = {"type": entity_type}
+        ret_val, response = self._make_rest_call_helper(url, action_result, params=params)
         if phantom.is_fail(ret_val):
             return action_result.get_status(), None
 
@@ -634,13 +607,10 @@ class VectraxdrUtils(object):
         return phantom.APP_SUCCESS, all_tags
 
     def _add_remove_entity_related_tags(self, action_result, entity_id, entity_type, tags):
-
-        url = f'{consts.VECTRA_API_VERSION}{consts.VECTRA_TAG_ENDPOINT.format(entity_id=entity_id)}'
-        params = {'type': entity_type}
-        payload = {'tags': tags}
-        ret_val, response = self._make_rest_call_helper(
-            url, action_result, method="patch", params=params, json=payload
-        )
+        url = f"{consts.VECTRA_API_VERSION}{consts.VECTRA_TAG_ENDPOINT.format(entity_id=entity_id)}"
+        params = {"type": entity_type}
+        payload = {"tags": tags}
+        ret_val, response = self._make_rest_call_helper(url, action_result, method="patch", params=params, json=payload)
         if phantom.is_fail(ret_val):
             return action_result.get_status(), None
 
@@ -659,13 +629,13 @@ class VectraxdrUtils(object):
         next_page_url = None
 
         while True:
-            self._connector.debug_print("hitting url {}".format(endpoint))
+            self._connector.debug_print(f"hitting url {endpoint}")
 
-            ret_val, response = self._make_rest_call_helper(endpoint, action_result, method='get', params=params, next_page_url=next_page_url)
+            ret_val, response = self._make_rest_call_helper(endpoint, action_result, method="get", params=params, next_page_url=next_page_url)
             if phantom.is_fail(ret_val):
                 return action_result.get_status(), None
 
-            res_val = response.get('results')
+            res_val = response.get("results")
             if res_val:
                 list_items.extend(res_val)
 
@@ -673,8 +643,8 @@ class VectraxdrUtils(object):
                 list_items = list_items[:limit]
                 break
 
-            next_link = response.get('next')
-            self._connector.debug_print("next_link url {}".format(next_link))
+            next_link = response.get("next")
+            self._connector.debug_print(f"next_link url {next_link}")
             if next_link:
                 next_page_url = next_link
                 params.clear()
@@ -684,17 +654,17 @@ class VectraxdrUtils(object):
         return phantom.APP_SUCCESS, list_items
 
     def _get_detections(self, action_result, detections, filters=None):
-        url = f'{consts.VECTRA_API_VERSION}{consts.VECTRA_DETECTIONS_ENDPOINT}'
-        params = {'id': detections}
+        url = f"{consts.VECTRA_API_VERSION}{consts.VECTRA_DETECTIONS_ENDPOINT}"
+        params = {"id": detections}
         if filters is not None:
             params.update(filters)
         ret_val, response = self._paginator(action_result, url, params=params)
         return ret_val, response
 
     def _get_assignments(self, action_result, entity):
-        url = f'{consts.VECTRA_API_VERSION}{consts.VECTRA_GET_ASSIGNMENTS}'
-        entity_type = entity.get('type')
-        entity_id = entity.get('id')
+        url = f"{consts.VECTRA_API_VERSION}{consts.VECTRA_GET_ASSIGNMENTS}"
+        entity_type = entity.get("type")
+        entity_id = entity.get("id")
         params = {}
         if entity_type and entity_id:
             entity_type = consts.ON_POLL_ENTITY_TYPE_MAPPING[entity_type]

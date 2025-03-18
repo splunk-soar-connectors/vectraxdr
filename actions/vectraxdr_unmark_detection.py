@@ -1,7 +1,7 @@
 """Class for unmark detection action."""
 # File: vectraxdr_unmark_detection.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -31,20 +31,15 @@ class UnmarkDetectionAction(BaseAction):
 
     def execute(self):
         """Execute the unmark detection as fixed action."""
-        ret_val, detection_id = self._connector.util._validate_integer(
-            self._action_result, self._param['detection_id'], "detection_id", True)
+        ret_val, detection_id = self._connector.util._validate_integer(self._action_result, self._param["detection_id"], "detection_id", True)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
-        ret_val, response = self._connector.util._mark_detection(
-            self._action_result, [detection_id], "False"
-        )
+        ret_val, response = self._connector.util._mark_detection(self._action_result, [detection_id], "False")
 
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
         self._action_result.add_data(response)
 
-        return self._action_result.set_status(
-            phantom.APP_SUCCESS, "Successfully unmarked detection"
-        )
+        return self._action_result.set_status(phantom.APP_SUCCESS, "Successfully unmarked detection")

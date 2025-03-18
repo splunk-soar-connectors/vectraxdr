@@ -10,7 +10,7 @@
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "Vectra",
-    "license": "Copyright (c) Vectra, 2023",
+    "license": "Copyright (c) Vectra, 2023-2025",
     "app_version": "1.0.1",
     "utctime_updated": "2023-05-18T06:13:37.709754Z",
     "package_name": "phantom_vectraxdr",

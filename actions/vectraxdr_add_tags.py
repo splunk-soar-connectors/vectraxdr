@@ -1,7 +1,7 @@
 """Class for add tags action."""
 # File: vectraxdr_add_tags.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -32,10 +32,10 @@ class AddTagsAction(BaseAction):
 
     def execute(self):
         """Execute the add tags action."""
-        entity_type = self._param['entity_type'].lower()
-        tags_list = self._param['tags_list']
+        entity_type = self._param["entity_type"].lower()
+        tags_list = self._param["tags_list"]
 
-        ret_val, entity_id = self._connector.util._validate_integer(self._action_result, self._param['entity_id'], "entity_id", True)
+        ret_val, entity_id = self._connector.util._validate_integer(self._action_result, self._param["entity_id"], "entity_id", True)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
@@ -47,9 +47,7 @@ class AddTagsAction(BaseAction):
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
-        ret_val, all_tags = self._connector.util._get_entity_related_tags(
-            self._action_result, entity_id, entity_type
-        )
+        ret_val, all_tags = self._connector.util._get_entity_related_tags(self._action_result, entity_id, entity_type)
 
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
@@ -57,9 +55,7 @@ class AddTagsAction(BaseAction):
         all_tags.extend(tags_list)
         all_tags = list(set(all_tags))
 
-        ret_val, response = self._connector.util._add_remove_entity_related_tags(
-            self._action_result, entity_id, entity_type, all_tags
-        )
+        ret_val, response = self._connector.util._add_remove_entity_related_tags(self._action_result, entity_id, entity_type, all_tags)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 

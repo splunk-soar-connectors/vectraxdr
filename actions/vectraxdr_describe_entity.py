@@ -1,7 +1,7 @@
 """Class for describe entity action."""
 # File: vectraxdr_describe_entity.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -32,9 +32,9 @@ class DescribeEntityAction(BaseAction):
 
     def execute(self):
         """Execute the describe entity action."""
-        entity_type = self._param['entity_type'].lower()
+        entity_type = self._param["entity_type"].lower()
 
-        ret_val, entity_id = self._connector.util._validate_integer(self._action_result, self._param['entity_id'], "entity_id", True)
+        ret_val, entity_id = self._connector.util._validate_integer(self._action_result, self._param["entity_id"], "entity_id", True)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 

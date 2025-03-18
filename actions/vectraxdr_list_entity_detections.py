@@ -1,7 +1,7 @@
 """Class for describe detection action."""
 # File: vectraxdr_list_entity_detections.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -32,9 +32,9 @@ class ListEntityDetectionsAction(BaseAction):
 
     def execute(self):
         """Execute the list entity detection action."""
-        entity_type = self._param['entity_type'].lower()
+        entity_type = self._param["entity_type"].lower()
 
-        ret_val, entity_id = self._connector.util._validate_integer(self._action_result, self._param['entity_id'], "entity_id", True)
+        ret_val, entity_id = self._connector.util._validate_integer(self._action_result, self._param["entity_id"], "entity_id", True)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
@@ -49,7 +49,7 @@ class ListEntityDetectionsAction(BaseAction):
         resp_detections = []
         if detection_ids:
             detection_ids = ",".join(detection_ids)
-            filters = {'state': 'active'}
+            filters = {"state": "active"}
             ret_val, resp_detections = self._connector.util._get_detections(self._action_result, detection_ids, filters)
             if phantom.is_fail(ret_val):
                 return self._action_result.get_status()

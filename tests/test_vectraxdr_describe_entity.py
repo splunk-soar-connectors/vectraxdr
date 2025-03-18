@@ -1,7 +1,7 @@
 """Unit test file for describe entity."""
 # File: test_vectraxdr_describe_entity.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -20,7 +20,6 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
-
 
 import json
 import unittest
@@ -50,7 +49,7 @@ class DescribeEntityAction(unittest.TestCase):
         Patch the get() to return the valid response.
         """
         vectraxdr_config.set_state_file(Token=True)
-        self.test_json['parameters'] = [{'entity_type': "account", 'entity_id': 1}]
+        self.test_json["parameters"] = [{"entity_type": "account", "entity_id": 1}]
 
         mock_get.return_value.status_code = 200
         mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS
@@ -70,7 +69,7 @@ class DescribeEntityAction(unittest.TestCase):
         Patch the get() to return the valid response.
         """
         vectraxdr_config.set_state_file(Token=True)
-        self.test_json['parameters'] = [{'entity_type': "account_not_present", 'entity_id': 1}]
+        self.test_json["parameters"] = [{"entity_type": "account_not_present", "entity_id": 1}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
@@ -87,7 +86,7 @@ class DescribeEntityAction(unittest.TestCase):
         Patch the get() to return the valid response.
         """
         vectraxdr_config.set_state_file(Token=True)
-        self.test_json['parameters'] = [{'entity_type': "account", 'entity_id': 0}]
+        self.test_json["parameters"] = [{"entity_type": "account", "entity_id": 0}]
 
         mock_get.return_value.status_code = 404
         mock_get.return_value.headers = vectraxdr_config.DEFAULT_HEADERS

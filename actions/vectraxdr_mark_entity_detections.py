@@ -1,7 +1,7 @@
 """Class for mark entity detections action."""
 # File: vectraxdr_mark_entity_detections.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -34,30 +34,23 @@ class MarkEntityDetectionsAction(BaseAction):
         """Execute the mark all entity detections as fixed action."""
         entity_type = self._param["entity_type"]
 
-        ret_val, entity_id = self._connector.util._validate_integer(self._action_result, self._param['entity_id'], "entity_id", True)
+        ret_val, entity_id = self._connector.util._validate_integer(self._action_result, self._param["entity_id"], "entity_id", True)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
         if entity_type not in consts.VECTRA_VALID_ENTITIES:
             return self._action_result.set_status(phantom.APP_ERROR, consts.VECTRA_ERROR_INVALID_ENTITY)
 
-        ret_val, detection_ids = self._connector.util._get_entity_related_detection_ids(
-            self._action_result, entity_id, entity_type
-        )
+        ret_val, detection_ids = self._connector.util._get_entity_related_detection_ids(self._action_result, entity_id, entity_type)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
         if not detection_ids:
-            return self._action_result.set_status(
-                phantom.APP_SUCCESS, "No detections found for given entity")
+            return self._action_result.set_status(phantom.APP_SUCCESS, "No detections found for given entity")
 
-        ret_val, response = self._connector.util._mark_detection(
-            self._action_result, detection_ids
-        )
+        ret_val, response = self._connector.util._mark_detection(self._action_result, detection_ids)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
         self._action_result.add_data(response)
 
-        return self._action_result.set_status(
-            phantom.APP_SUCCESS, "Successfully marked all entity detections"
-        )
+        return self._action_result.set_status(phantom.APP_SUCCESS, "Successfully marked all entity detections")

@@ -1,7 +1,7 @@
 """Class for resolve assignment action."""
 # File: vectraxdr_resolve_assignment.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -36,22 +36,20 @@ class ResolveAssignmentAction(BaseAction):
         outcome = self._param["outcome"]
         detection_ids = self._param.get("detection_ids")
 
-        ret_val, assignment_id = self._connector.util._validate_integer(
-            self._action_result, self._param["assignment_id"], "assignment_id", True)
+        ret_val, assignment_id = self._connector.util._validate_integer(self._action_result, self._param["assignment_id"], "assignment_id", True)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
-        payload = {
-            param: self._param[param] for param in optional_params if self._param.get(param)
-        }
+        payload = {param: self._param[param] for param in optional_params if self._param.get(param)}
 
-        if not payload.get('note'):
-            payload['note'] = "Updated by Splunk SOAR"
+        if not payload.get("note"):
+            payload["note"] = "Updated by Splunk SOAR"
 
         # Check detection_ids params, if present convert to list of integer
         if detection_ids:
             ret_val, detection_ids_list = self._connector.util._extract_ids_from_param(
-                self._action_result, "detection_ids", detection_ids, is_numeric=True)
+                self._action_result, "detection_ids", detection_ids, is_numeric=True
+            )
 
             if phantom.is_fail(ret_val):
                 return self._action_result.get_status()
@@ -59,15 +57,13 @@ class ResolveAssignmentAction(BaseAction):
                 payload["detection_ids"] = detection_ids_list
 
         # Process to get outcome id
-        ret_val, payload["outcome"] = self._connector.util._get_outcome_map(
-            self._action_result, outcome)
+        ret_val, payload["outcome"] = self._connector.util._get_outcome_map(self._action_result, outcome)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
         # Vectra resolve assignment API call
         url = f"{consts.VECTRA_API_VERSION}{consts.VECTRA_RESOLVE_ASSIGNMENT.format(assignment_id=assignment_id)}"
-        ret_val, response = self._connector.util._make_rest_call_helper(
-            url, self._action_result, "put", json=payload)
+        ret_val, response = self._connector.util._make_rest_call_helper(url, self._action_result, "put", json=payload)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
