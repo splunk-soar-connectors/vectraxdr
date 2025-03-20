@@ -1,7 +1,7 @@
 """Class for add assignment action."""
 # File: vectraxdr_add_assignment.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -32,13 +32,13 @@ class AddAssignmentAction(BaseAction):
 
     def execute(self):
         """Execute the add assignment action."""
-        entity_type = self._param['entity_type'].lower()
+        entity_type = self._param["entity_type"].lower()
 
-        ret_val, entity_id = self._connector.util._validate_integer(self._action_result, self._param['entity_id'], "entity_id", True)
+        ret_val, entity_id = self._connector.util._validate_integer(self._action_result, self._param["entity_id"], "entity_id", True)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
-        ret_val, user_id = self._connector.util._validate_integer(self._action_result, self._param['user_id'], "user_id", True)
+        ret_val, user_id = self._connector.util._validate_integer(self._action_result, self._param["user_id"], "user_id", True)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
@@ -47,7 +47,7 @@ class AddAssignmentAction(BaseAction):
 
         url = f"{consts.VECTRA_API_VERSION}{consts.VECTRA_ADD_ASSIGNMENT}"
         payload = {
-            "assign_{}_id".format(entity_type): str(entity_id),
+            f"assign_{entity_type}_id": str(entity_id),
             "assign_to_user_id": str(user_id),
         }
 

@@ -1,7 +1,7 @@
 """Class for remove note action."""
 # File: vectraxdr_remove_note.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -32,24 +32,22 @@ class RemoveNoteAction(BaseAction):
 
     def execute(self):
         """Execute the remove note action."""
-        entity_type = self._param['entity_type'].lower()
+        entity_type = self._param["entity_type"].lower()
 
-        ret_val, entity_id = self._connector.util._validate_integer(self._action_result, self._param['entity_id'], "entity_id", True)
+        ret_val, entity_id = self._connector.util._validate_integer(self._action_result, self._param["entity_id"], "entity_id", True)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
-        ret_val, note_id = self._connector.util._validate_integer(self._action_result, self._param['note_id'], "note_id", True)
+        ret_val, note_id = self._connector.util._validate_integer(self._action_result, self._param["note_id"], "note_id", True)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
         if entity_type not in consts.VECTRA_VALID_ENTITIES:
             return self._action_result.set_status(phantom.APP_ERROR, consts.VECTRA_ERROR_INVALID_ENTITY)
 
-        url = f'{consts.VECTRA_API_VERSION}{consts.VECTRA_NOTES_UPDATE_ENDPOINT.format(entity_id=entity_id, note_id=note_id)}'
-        params = {'type': entity_type}
-        ret_val, response = self._connector.util._make_rest_call_helper(
-            url, self._action_result, method="delete", params=params
-        )
+        url = f"{consts.VECTRA_API_VERSION}{consts.VECTRA_NOTES_UPDATE_ENDPOINT.format(entity_id=entity_id, note_id=note_id)}"
+        params = {"type": entity_type}
+        ret_val, response = self._connector.util._make_rest_call_helper(url, self._action_result, method="delete", params=params)
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 

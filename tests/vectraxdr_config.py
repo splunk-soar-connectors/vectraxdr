@@ -1,7 +1,7 @@
 """Config file."""
 # File: vectraxdr_config.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -28,6 +28,7 @@ import encryption_helper
 import requests
 from dotenv import load_dotenv
 
+
 # Load '.env' file to the environment variables.
 load_dotenv()
 
@@ -41,8 +42,8 @@ DUMMY_BASE_URL = "https://1234567891243.uw2.portal.vectra.ai"
 MAIN_MODULE = "vectraxdr_connector.py"
 session_id = None
 
-ACTION_HEADER = {'Authorization': 'Bearer <dummy_access_token>', 'User-agent': USER_AGENT}
-TOKEN_HEADER = {"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json", 'User-agent': USER_AGENT}
+ACTION_HEADER = {"Authorization": "Bearer <dummy_access_token>", "User-agent": USER_AGENT}
+TOKEN_HEADER = {"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json", "User-agent": USER_AGENT}
 TOKEN_DATA = {"client_id": "<client_id>", "client_secret": "<dummy_client_secret>", "grant_type": "api_key"}
 
 cipher_text = encryption_helper.encrypt("<dummy_client_secret>", DEFAULT_ASSET_ID)
@@ -62,7 +63,7 @@ TEST_JSON = {
     "main_module": MAIN_MODULE,
     "debug_level": 3,
     "dec_key": DEFAULT_ASSET_ID,
-    "parameters": [{}]
+    "parameters": [{}],
 }
 
 TOKEN_DUMMY_ACCESS_TOKEN_1 = "dummy value 1"
@@ -90,7 +91,7 @@ def set_state_file(Token=False):
         state_file["token"] = {
             "access_token": encryption_helper.encrypt("<dummy_access_token>", DEFAULT_ASSET_ID),
             "refresh_token": encryption_helper.encrypt("<dummy_refresh_token>", DEFAULT_ASSET_ID),
-            "expire": 33333333
+            "expire": 33333333,
         }
     state_file = json.dumps(state_file)
 
@@ -117,16 +118,9 @@ def get_session_id(connector, verify=False):
     # TODO: Remove this
     os.environ["USERNAME"] = "soar_local_admin"
     os.environ["PASSWORD"] = "password"  # pragma: allowlist secret  width="300" height="390"
-    data = {
-        "username": os.environ.get("USERNAME"),
-        "password": os.environ.get("PASSWORD"),
-        "csrfmiddlewaretoken": csrftoken
-    }
+    data = {"username": os.environ.get("USERNAME"), "password": os.environ.get("PASSWORD"), "csrfmiddlewaretoken": csrftoken}
 
-    headers = {
-        "Cookie": f"csrftoken={csrftoken}",
-        "Referer": login_url
-    }
+    headers = {"Cookie": f"csrftoken={csrftoken}", "Referer": login_url}
 
     # Logging into the Platform to get the session id
     r2 = requests.post(login_url, verify=verify, data=data, headers=headers)

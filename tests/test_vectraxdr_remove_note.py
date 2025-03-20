@@ -1,7 +1,7 @@
 """Unit test file for remove note."""
 # File: test_vectraxdr_remove_note.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -20,7 +20,6 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
-
 
 import json
 import unittest
@@ -51,7 +50,7 @@ class RemoveNoteAction(unittest.TestCase):
         Patch the delete() to return the valid response.
         """
         vectraxdr_config.set_state_file(Token=True)
-        self.test_json['parameters'] = [{'entity_id': 212, "entity_type": "host", "note_id": 123}]
+        self.test_json["parameters"] = [{"entity_id": 212, "entity_type": "host", "note_id": 123}]
 
         mock_delete.return_value.status_code = 204
         mock_delete.return_value.headers = {"Content-Type": vectraxdr_config.CONTENT_HTML_TYPE}
@@ -72,7 +71,7 @@ class RemoveNoteAction(unittest.TestCase):
         Patch the delete() to return the valid response.
         """
         vectraxdr_config.set_state_file(Token=True)
-        self.test_json['parameters'] = [{'entity_id': 212, "entity_type": "host", "note_id": 456}]
+        self.test_json["parameters"] = [{"entity_id": 212, "entity_type": "host", "note_id": 456}]
 
         mock_delete.return_value.status_code = 404
         mock_delete.return_value.headers = {"Content-Type": vectraxdr_config.CONTENT_HTML_TYPE}
@@ -92,7 +91,7 @@ class RemoveNoteAction(unittest.TestCase):
         Patch the delete() to return the valid response.
         """
         vectraxdr_config.set_state_file(Token=True)
-        self.test_json['parameters'] = [{'entity_type': "account_not_present", 'entity_id': 1, "note_id": 123}]
+        self.test_json["parameters"] = [{"entity_type": "account_not_present", "entity_id": 1, "note_id": 123}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)

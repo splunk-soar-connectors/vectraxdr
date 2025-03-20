@@ -1,7 +1,7 @@
 """Unit test file for utils."""
 # File: test_vectraxdr_utils.py
 #
-# Copyright (c) 2023 Vectra
+# Copyright (c) 2023-2025 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
@@ -40,7 +40,7 @@ class TestRetValClass(unittest.TestCase):
     @parameterized.expand(
         [
             ["single_value", [True], (True, None)],
-            ["two_value", [True, {'key': 'value'}], (True, {'key': 'value'})],
+            ["two_value", [True, {"key": "value"}], (True, {"key": "value"})],
         ]
     )
     def test_ret_val_pass(self, _, input_val, expected):
@@ -66,7 +66,7 @@ class TestValidateIntegerMethod(unittest.TestCase):
     )
     def test_validate_integer_pass(self, _, input_value, expected_value, expected_message):
         """Test the valid cases for the validate integer method."""
-        ret_val, output = self.util._validate_integer(self.action_result, input_value, 'id', True)
+        ret_val, output = self.util._validate_integer(self.action_result, input_value, "id", True)
 
         self.assertTrue(ret_val)
         self.assertEqual(output, expected_value)
@@ -80,7 +80,7 @@ class TestValidateIntegerMethod(unittest.TestCase):
     )
     def test_validate_integer_fail(self, _, input_value, expected_message):
         """Test the failed cases for the validate integer method."""
-        ret_val, output = self.util._validate_integer(self.action_result, input_value, 'id', False)
+        ret_val, output = self.util._validate_integer(self.action_result, input_value, "id", False)
         self.assertFalse(ret_val)
         self.assertIsNone(output)
         self.assertEqual(self.action_result.get_message(), expected_message)
@@ -100,81 +100,105 @@ class TestEncryptionMethod(unittest.TestCase):
 
     @parameterized.expand(
         [
-            ["token1", {'token': {
-                'access_token': vectraxdr_config.TOKEN_DUMMY_ACCESS_TOKEN_1,
-                'refresh_token': vectraxdr_config.TOKEN_DUMMY_REFRESH_TOKEN_1,
-                'expire': 12345
-            }}, vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_1],
-            ["token2", {'token': {
-                'access_token': vectraxdr_config.TOKEN_DUMMY_ACCESS_TOKEN_2,
-                'refresh_token': vectraxdr_config.TOKEN_DUMMY_REFRESH_TOKEN_2,
-                'expire': 67891
-            }}, vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_2],
-            ["no_token", {'app_version': '1.0.0'}, {}],
+            [
+                "token1",
+                {
+                    "token": {
+                        "access_token": vectraxdr_config.TOKEN_DUMMY_ACCESS_TOKEN_1,
+                        "refresh_token": vectraxdr_config.TOKEN_DUMMY_REFRESH_TOKEN_1,
+                        "expire": 12345,
+                    }
+                },
+                vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_1,
+            ],
+            [
+                "token2",
+                {
+                    "token": {
+                        "access_token": vectraxdr_config.TOKEN_DUMMY_ACCESS_TOKEN_2,
+                        "refresh_token": vectraxdr_config.TOKEN_DUMMY_REFRESH_TOKEN_2,
+                        "expire": 67891,
+                    }
+                },
+                vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_2,
+            ],
+            ["no_token", {"app_version": "1.0.0"}, {}],
         ]
     )
     def test_encrypt_state_pass(self, name, input_value, expected_value):
         """Test the pass cases for the encrypt state method."""
         output = self.util._encrypt_state(input_value)
         if "token1" in name:
-            self.assertEqual(output.get('token', {}).get('access_token', ''), expected_value)
+            self.assertEqual(output.get("token", {}).get("access_token", ""), expected_value)
         elif "token2" in name:
-            self.assertEqual(output.get('token', {}).get('refresh_token', ''), expected_value)
+            self.assertEqual(output.get("token", {}).get("refresh_token", ""), expected_value)
         else:
-            self.assertEqual(output.get('token', {}), expected_value)
+            self.assertEqual(output.get("token", {}), expected_value)
 
     @parameterized.expand(
         [
-            ["token1", {'token': {
-                'access_token': vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_1,
-                'refresh_token': vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_1,
-                'expire': 12345
-            }}, vectraxdr_config.TOKEN_DUMMY_ACCESS_TOKEN_1],
-            ["token2", {'token': {
-                'access_token': vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_2,
-                'refresh_token': vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_2,
-                'expire': 12345
-            }}, vectraxdr_config.TOKEN_DUMMY_REFRESH_TOKEN_2],
-            ["no_token", {'app_version': '1.0.0'}, {}],
+            [
+                "token1",
+                {
+                    "token": {
+                        "access_token": vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_1,
+                        "refresh_token": vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_1,
+                        "expire": 12345,
+                    }
+                },
+                vectraxdr_config.TOKEN_DUMMY_ACCESS_TOKEN_1,
+            ],
+            [
+                "token2",
+                {
+                    "token": {
+                        "access_token": vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_2,
+                        "refresh_token": vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_2,
+                        "expire": 12345,
+                    }
+                },
+                vectraxdr_config.TOKEN_DUMMY_REFRESH_TOKEN_2,
+            ],
+            ["no_token", {"app_version": "1.0.0"}, {}],
         ]
     )
     def test_decrypt_state_pass(self, name, input_value, expected_value):
         """Test the pass cases for the decrypt state method."""
         output = self.util._decrypt_state(input_value)
         if "token1" in name:
-            self.assertEqual(output.get('token', {}).get('access_token', ''), expected_value)
+            self.assertEqual(output.get("token", {}).get("access_token", ""), expected_value)
         elif "token2" in name:
-            self.assertEqual(output.get('token', {}).get('refresh_token', ''), expected_value)
+            self.assertEqual(output.get("token", {}).get("refresh_token", ""), expected_value)
         else:
-            self.assertEqual(output.get('token', {}), expected_value)
+            self.assertEqual(output.get("token", {}), expected_value)
 
-    @patch('vectraxdr_utils.encryption_helper.encrypt')
+    @patch("vectraxdr_utils.encryption_helper.encrypt")
     def test_encrypt_state_fail(self, mock_encrypt):
         """Test the fail cases for the encrypt state method."""
         mock_encrypt.side_effect = Exception("Couldn't encrypt")
 
         output = self.util._encrypt_state(
             {
-                'token': {
-                    'access_token': vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_1,
-                    'refresh_token': vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_1,
-                    'expire': 123456
+                "token": {
+                    "access_token": vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_1,
+                    "refresh_token": vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_1,
+                    "expire": 123456,
                 }
             }
         )
         self.assertEqual(output, {})
 
-    @patch('vectraxdr_utils.encryption_helper.decrypt')
+    @patch("vectraxdr_utils.encryption_helper.decrypt")
     def test_decrypt_state_fail(self, mock_decrypt):
         """Test the fail cases for the decrypt state method."""
         mock_decrypt.side_effect = Exception("Couldn't decrypt")
 
         output = self.util._decrypt_state(
             {
-                'token': {
-                    'access_token': vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_1,
-                    'refresh_token': vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_1,
-                    'expire': 123456
+                "token": {
+                    "access_token": vectraxdr_config.TOKEN_DUMMY_ACCESS_CIPHER_1,
+                    "refresh_token": vectraxdr_config.TOKEN_DUMMY_REFRESH_CIPHER_1,
+                    "expire": 123456,
                 }
             }
         )
@@ -219,8 +243,9 @@ class TestProcessEmptyResponse(unittest.TestCase):
         self.action_result = ActionResult(dict())
         return super().setUp()
 
-    @parameterized.expand([
-        ["success_code", 200, True, {}], ["success_code", 201, True, {}], ["success_code", 204, True, {}], ["error_code", 401, False, None]])
+    @parameterized.expand(
+        [["success_code", 200, True, {}], ["success_code", 201, True, {}], ["success_code", 204, True, {}], ["error_code", 401, False, None]]
+    )
     def test_process_empty_response(self, _, mock_code, expected_status, expected_value):
         """Test the pass and fail cases of process empty response method."""
         self.response.status_code = mock_code
@@ -239,9 +264,11 @@ class TestProcessHtmlResponse(unittest.TestCase):
         self.action_result = ActionResult(dict())
         return super().setUp()
 
-    @parameterized.expand([
-        ["normal_response", "Oops!<script>document.getElementById('demo')</script>", False, "Status code: 500, Data from server: Oops!"],
-    ])
+    @parameterized.expand(
+        [
+            ["normal_response", "Oops!<script>document.getElementById('demo')</script>", False, "Status code: 500, Data from server: Oops!"],
+        ]
+    )
     def test_process_html_response(self, _, response_value, expected_value, expected_message):
         """Test the pass and fail cases of process html response method."""
         if response_value:
@@ -276,29 +303,37 @@ class TestProcessJsonResponse(unittest.TestCase):
         self.action_result = ActionResult(dict())
         return super().setUp()
 
-    @parameterized.expand([
-        ["token_response", 200, True, {
-            "access_token": "dummy_access_token",
-            "refresh_token": "dummy_refresh_token",
-            "expires_in": 21600,
-            "refresh_expires_in": 86400,
-            "token_type": "Bearer"
-        }, {
-            "access_token": "dummy_access_token",
-            "refresh_token": "dummy_refresh_token",
-            "expires_in": 21600,
-            "refresh_expires_in": 86400,
-            "token_type": "Bearer"
-        }],
+    @parameterized.expand(
         [
-            "valid_failure_json_response",
-            401,
-            False,
-            {"error": "Authentication Error. Please try reauthenticating using API client credentials."},
-            None
-        ],
-        ["invalid_json_response", 404, False, KeyError("Invalid Json"), None],
-    ])
+            [
+                "token_response",
+                200,
+                True,
+                {
+                    "access_token": "dummy_access_token",
+                    "refresh_token": "dummy_refresh_token",
+                    "expires_in": 21600,
+                    "refresh_expires_in": 86400,
+                    "token_type": "Bearer",
+                },
+                {
+                    "access_token": "dummy_access_token",
+                    "refresh_token": "dummy_refresh_token",
+                    "expires_in": 21600,
+                    "refresh_expires_in": 86400,
+                    "token_type": "Bearer",
+                },
+            ],
+            [
+                "valid_failure_json_response",
+                401,
+                False,
+                {"error": "Authentication Error. Please try reauthenticating using API client credentials."},
+                None,
+            ],
+            ["invalid_json_response", 404, False, KeyError("Invalid Json"), None],
+        ]
+    )
     def test_process_json_response(self, name, mock_code, expected_status, mock_response, expected_value):
         """Test the pass and fail cases of process json response method."""
         self.response.status_code = mock_code
@@ -333,10 +368,10 @@ class TestGeneralCases(unittest.TestCase):
         self.assertIsNone(response)
         self.assertEqual(self.action_result.get_message(), "Invalid method: invalid_method")
 
-    @patch('vectraxdr_utils.requests.get')
+    @patch("vectraxdr_utils.requests.get")
     def test_make_rest_call_throw_exception(self, mock_get):
         """Test the _make_rest_call for error case."""
-        mock_get.side_effect = Exception('error code', 'error message')
+        mock_get.side_effect = Exception("error code", "error message")
 
         ret_val, response = self.util._make_rest_call("/endpoint", self.action_result, headers={})
         self.assertFalse(ret_val)
@@ -384,22 +419,20 @@ class TestGenerateAccessToken(unittest.TestCase):
         self.action_result = ActionResult(dict())
         return super().setUp()
 
-    @parameterized.expand([
-        ["token_response", 200, True, "", {
-            "access_token": "dummy_access_token",
-            "expires_in": 21600,
-            "token_type": "Bearer"
-        }],
+    @parameterized.expand(
         [
-            "valid_failure",
-            401,
-            False,
-            "Error from server. Status code: 401,\
+            ["token_response", 200, True, "", {"access_token": "dummy_access_token", "expires_in": 21600, "token_type": "Bearer"}],
+            [
+                "valid_failure",
+                401,
+                False,
+                "Error from server. Status code: 401,\
                   Error message: Authentication Error. Please try reauthenticating using API client credentials.",
-            {"error": "Authentication Error. Please try reauthenticating using API client credentials."}
-        ],
-        ["invalid_json_response", 200, False, "Access token generation failed", {"not_avaliable": "access token"}]
-    ])
+                {"error": "Authentication Error. Please try reauthenticating using API client credentials."},
+            ],
+            ["invalid_json_response", 200, False, "Access token generation failed", {"not_avaliable": "access token"}],
+        ]
+    )
     @patch("vectraxdr_utils.requests.post")
     def test_generate_access_token(self, name, mock_code, expected_status, expected_message, mock_response, mock_post):
         """Test the pass and fail cases of generate token method."""
@@ -420,7 +453,7 @@ class TestGenerateRefreshToken(unittest.TestCase):
         connector.error_print.return_value = None
         connector.config = {
             "client_id": "12345",
-            "client_secret": "secret"  # pragma: allowlist secret`
+            "client_secret": "secret",  # pragma: allowlist secret`
         }
         connector.state = {"token": {}}
         self.response = Mock()
@@ -428,24 +461,32 @@ class TestGenerateRefreshToken(unittest.TestCase):
         self.action_result = ActionResult(dict())
         return super().setUp()
 
-    @parameterized.expand([
-        ["token_response", 200, True, "", {
-            "access_token": "dummy_access_token",
-            "refresh_token": "dummy_refresh_token",
-            "expires_in": 21600,
-            "refresh_expires_in": 86400,
-            "token_type": "Bearer"
-        }],
+    @parameterized.expand(
         [
-            "valid_failure",
-            401,
-            False,
-            "Error from server. Status code: 401,\
+            [
+                "token_response",
+                200,
+                True,
+                "",
+                {
+                    "access_token": "dummy_access_token",
+                    "refresh_token": "dummy_refresh_token",
+                    "expires_in": 21600,
+                    "refresh_expires_in": 86400,
+                    "token_type": "Bearer",
+                },
+            ],
+            [
+                "valid_failure",
+                401,
+                False,
+                "Error from server. Status code: 401,\
                   Error message: Authentication Error. Please try reauthenticating using API client credentials.",
-            {"error": "Authentication Error. Please try reauthenticating using API client credentials."}
-        ],
-        ["invalid_json_response", 200, False, "Tokens generation failed", {"not_avaliable": "access token"}]
-    ])
+                {"error": "Authentication Error. Please try reauthenticating using API client credentials."},
+            ],
+            ["invalid_json_response", 200, False, "Tokens generation failed", {"not_avaliable": "access token"}],
+        ]
+    )
     @patch("vectraxdr_utils.requests.post")
     def test_generate_access_token(self, name, mock_code, expected_status, expected_message, mock_response, mock_post):
         """Test the pass and fail cases of generate token method."""

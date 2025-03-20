@@ -1,24 +1,3 @@
-[comment]: # " File: README.md"
-[comment]: # "   Copyright (c) 2023 Vectra"
-[comment]: # "   "
-[comment]: # "   This unpublished material is proprietary to Vectra."
-[comment]: # "   All rights reserved. The methods and"
-[comment]: # "   techniques described herein are considered trade secrets"
-[comment]: # "   and/or confidential. Reproduction or distribution, in whole"
-[comment]: # "   or in part, is forbidden except by express written permission"
-[comment]: # "   of Vectra."
-[comment]: # "   "
-[comment]: # "   Licensed under the Apache License, Version 2.0 (the 'License');"
-[comment]: # "   you may not use this file except in compliance with the License."
-[comment]: # "   You may obtain a copy of the License at"
-[comment]: # "   "
-[comment]: # "       http://www.apache.org/licenses/LICENSE-2.0"
-[comment]: # "   "
-[comment]: # "   Unless required by applicable law or agreed to in writing, software distributed under"
-[comment]: # "   the License is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,"
-[comment]: # "   either express or implied. See the License for the specific language governing permissions"
-[comment]: # "   and limitations under the License."
-[comment]: # "   "
 ## Explanation of the Asset Configuration Parameters
 
 The asset configuration parameters affect 'test connectivity' and some other actions of the
@@ -33,7 +12,7 @@ application. The parameters related to test connectivity action are metioned bel
 - ### Test Connectivity
 
   This action will check the status of the Vectra API endpoint and test connectivity of Splunk SOAR
-  to the Vectra instance. It can be used to generate new tokens.  
+  to the Vectra instance. It can be used to generate new tokens.\
   The action validates the provided asset configuration parameters. Based on the response from the
   API call, the appropriate success and failure message will be displayed when the action gets
   executed.
@@ -46,40 +25,34 @@ application. The parameters related to test connectivity action are metioned bel
   ### Prerequisite for On Poll
 
   - This app should have permission to delete artifact(s)
+
   - By default, the automation user is selected to run the Vectra XDR for Splunk SOAR ingestion
-    action. (See **Asset Configuration** \> **Asset Settings** \> **Advanced** ) The automation user
+    action. (See **Asset Configuration** > **Asset Settings** > **Advanced** ) The automation user
     does **NOT** have permission to delete the artifacts. This can cause duplication of detection
     artifacts.
+
   - In order to solve this problem, you must create a user of type **Automation** with
     **Administrator** role. Then, choose this user in your Vectra XDR for Splunk SOAR **Asset
-    Settings** under **Advanced** .  
-      
-    **Administration** \> **User Management** \> **Users** **\> + User**  
-      
-    [![](img/create_role.png)](img/create_role.png)  
-      
-      
-    **Asset Settings** \> **Advanced**  
-      
-    [![](img/asset_settings.png)](img/asset_settings.png)  
-      
-      
-  - Make sure severity low, medium, and high is present in soar instance, which comes by default.  
-    **NOTE:** To check severity refer this path: **Administration** \> **Event Settings** \>
+    Settings** under **Advanced** .
+
+    **Administration** > **User Management** > **Users** **> + User**
+
+    [![](img/create_role.png)](img/create_role.png)
+
+    **Asset Settings** > **Advanced**
+
+    [![](img/asset_settings.png)](img/asset_settings.png)
+
+  - Make sure severity low, medium, and high is present in soar instance, which comes by default.\
+    **NOTE:** To check severity refer this path: **Administration** > **Event Settings** >
     **Severity**
 
-  
-
 - Manual Polling (POLL NOW)
-
-    
 
   - It will fetch the data when initiated, as per the corresponding asset configuration parameters.
     It does not store the last run context of the fetched data.
 
 - **Schedule/Interval Polling**
-
-    
 
   - **Schedule Polling:** The ingestion action can be triggered at every specified time interval.
   - **Interval Polling:** The ingestion action can be triggered at every time range interval.
@@ -94,8 +67,6 @@ application. The parameters related to test connectivity action are metioned bel
 
 - **Action Parameter: Poll only prioritized entities**
 
-    
-
   - This parameter has three options - True, False and All.
   - If value is set to True then it will fetch those entities which are prioritized.
   - If value is set to False then it will fetch those entities which are not prioritized.
@@ -105,15 +76,11 @@ application. The parameters related to test connectivity action are metioned bel
 
 - **Action Parameter: Entity type (On Poll)**
 
-    
-
   - This parameter has three options - Account, Host and All.
   - These parameters are mainly used for additional filtering of entities. If no entity will be
     found with given entity type, there would be no detection or assignments ingested.
 
 - **Action Parameter: Filter entities with given tags (comma-separated) (On Poll)**
-
-    
 
   - This parameter accepts comma-separated names of the entity tags.
   - This will filter entities which have any of the given tags.
@@ -205,20 +172,14 @@ Appends tags on existing tags of an entity
 
 - **Action Parameter: Entity ID**
 
-    
-
   - Id of entity
 
 - **Action Parameter: Entity type**
-
-    
 
   - Type of entity
   - This parameter has 2 options - Account and Host
 
 - **Action Parameter: Tags list**
-
-    
 
   - This parameter accepts comma-separated values for tags to be added
 
@@ -228,20 +189,14 @@ Removes tags from existing tags of an entity
 
 - **Action Parameter: Entity ID**
 
-    
-
   - Id of entity
 
 - **Action Parameter: Entity type**
-
-    
 
   - Type of entity
   - This parameter has 2 options - Account and Host
 
 - **Action Parameter: tags list**
-
-    
 
   - This parameter accepts comma-separated values for tags to be removed
 
@@ -251,20 +206,14 @@ Adds note in specific entity
 
 - **Action Parameter: Entity ID**
 
-    
-
   - Id of entity
 
 - **Action Parameter: Entity type**
-
-    
 
   - Type of entity
   - This parameter has 2 options - Account and Host
 
 - **Action Parameter: Note**
-
-    
 
   - A note to be added in given entity
 
@@ -274,20 +223,14 @@ Removes note in specific entity
 
 - **Action Parameter: Entity ID**
 
-    
-
   - Id of entity
 
 - **Action Parameter: Entity type**
-
-    
 
   - Type of entity
   - This parameter has 2 options - Account and Host
 
 - **Action Parameter: Note ID**
-
-    
 
   - Id of note to be removed
 
@@ -297,26 +240,18 @@ Updates note in specific entity
 
 - **Action Parameter: Entity ID**
 
-    
-
   - Id of entity
 
 - **Action Parameter: Entity type**
-
-    
 
   - Type of entity
   - This parameter has 2 options - Account and Host
 
 - **Action Parameter: Note ID of the note**
 
-    
-
   - Note ID
 
 - **Action Parameter: Note**
-
-    
 
   - Note to be updated
 
@@ -326,20 +261,14 @@ Creates assignment for given entity id and user id
 
 - **Action Parameter: Entity ID**
 
-    
-
   - Id of entity
 
 - **Action Parameter: Entity type**
-
-    
 
   - Type of entity
   - This parameter has 2 options - Account and Host
 
 - **Action Parameter:User ID**
-
-    
 
   - User ID for given assignment
 
@@ -349,13 +278,9 @@ Updated assignment for given assignment id and user id
 
 - **Action Parameter: Assignment ID**
 
-    
-
   - Id of assignment
 
 - **Action Parameter:User ID**
-
-    
 
   - User ID for given assignment
 
@@ -365,31 +290,21 @@ Resolves assignment of an entity
 
 - **Action Parameter: Outcome**
 
-    
-
   - Valid outcome to add as resolution
 
 - **Action Parameter: Note**
-
-    
 
   - Note to be added
 
 - **Action Parameter: Triage as**
 
-    
-
   - Label for resolution
 
 - **Action Parameter: Detection IDs**
 
-    
-
   - Comma separated list of detection ids
 
 - **Action Parameter: Assignment ID**
-
-    
 
   - ID of assignment
 
@@ -399,13 +314,9 @@ Be able to mark all detections of an entity as fixed
 
 - **Action Parameter: Entity ID**
 
-    
-
   - Id of entity
 
 - **Action Parameter: Entity type**
-
-    
 
   - Type of entity
   - This parameter has 2 options - Account and Host
@@ -416,8 +327,6 @@ Mark the status of detection as fixed
 
 - **Action Parameter: Detection ID**
 
-    
-
   - Id of detection
 
 ### Unmark detection
@@ -425,8 +334,6 @@ Mark the status of detection as fixed
 Unmark the status of detection
 
 - **Action Parameter: Detection ID**
-
-    
 
   - Id of detection
 
@@ -436,13 +343,9 @@ Gets all the details of given entity id
 
 - **Action Parameter: Entity ID**
 
-    
-
   - Id of entity
 
 - **Action Parameter: Entity type**
-
-    
 
   - Type of entity
   - This parameter has 2 options - Account and Host
@@ -453,8 +356,6 @@ Gets all the details of given detection id
 
 - **Action Parameter: Detection ID**
 
-    
-
   - Id of detection
 
 ### List entity detections
@@ -463,13 +364,9 @@ The action is able to list all active detections present in an entity
 
 - **Action Parameter: Entity ID**
 
-    
-
   - Id of entity
 
 - **Action Parameter: Entity type**
-
-    
 
   - Type of entity
   - This parameter has 2 options - Account and Host
@@ -479,7 +376,5 @@ The action is able to list all active detections present in an entity
 The action is able to download PCAP of a detection
 
 - **Action Parameter: Detection ID**
-
-    
 
   - Id of detection
