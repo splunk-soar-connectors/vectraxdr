@@ -3748,12 +3748,20 @@
     "pip_dependencies": {
         "wheel": [
             {
-                "module": "beautifulsoup4",
-                "input_file": "wheels/py3/beautifulsoup4-4.11.2-py3-none-any.whl"
+                "module": "dateparser",
+                "input_file": "wheels/shared/dateparser-1.1.8-py2.py3-none-any.whl"
             },
             {
-                "module": "soupsieve",
-                "input_file": "wheels/py3/soupsieve-2.3.2.post1-py3-none-any.whl"
+                "module": "pytz",
+                "input_file": "wheels/shared/pytz-2025.2-py2.py3-none-any.whl"
+            },
+            {
+                "module": "regex",
+                "input_file": "wheels/py39/regex-2024.11.6-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "tzlocal",
+                "input_file": "wheels/py3/tzlocal-5.3.1-py3-none-any.whl"
             }
         ]
     },
