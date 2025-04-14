@@ -1,7 +1,7 @@
 # Vectra XDR Splunk SOAR
 
 Publisher: Vectra \
-Connector Version: 1.0.1 \
+Connector Version: 1.0.2 \
 Product Vendor: Vectra \
 Product Name: Vectra \
 Minimum Product Version: 6.0.2
