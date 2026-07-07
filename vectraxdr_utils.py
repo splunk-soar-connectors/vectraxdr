@@ -1,6 +1,6 @@
 # File: vectraxdr_utils.py
 #
-# Copyright (c) Vectra, 2023-2025
+# Copyright (c) Vectra, 2023-2026
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and

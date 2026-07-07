@@ -1,7 +1,7 @@
 """Class for add note action."""
 # File: vectraxdr_add_note.py
 #
-# Copyright (c) 2023-2025 Vectra
+# Copyright (c) 2023-2026 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and
