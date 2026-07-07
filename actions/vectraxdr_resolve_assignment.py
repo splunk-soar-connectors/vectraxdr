@@ -1,7 +1,7 @@
 """Class for resolve assignment action."""
 # File: vectraxdr_resolve_assignment.py
 #
-# Copyright (c) 2023-2025 Vectra
+# Copyright (c) 2023-2026 Vectra
 #
 # This unpublished material is proprietary to Vectra.
 # All rights reserved. The methods and

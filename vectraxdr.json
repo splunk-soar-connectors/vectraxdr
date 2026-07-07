@@ -10,7 +10,7 @@
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "Vectra",
-    "license": "Copyright (c) Vectra, 2023-2025",
+    "license": "Copyright (c) Vectra, 2023-2026",
     "app_version": "1.0.2",
     "utctime_updated": "2025-04-14T18:57:02.420399Z",
     "package_name": "phantom_vectraxdr",
@@ -3753,11 +3753,11 @@
             },
             {
                 "module": "pytz",
-                "input_file": "wheels/shared/pytz-2025.2-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/pytz-2026.2-py2.py3-none-any.whl"
             },
             {
                 "module": "regex",
-                "input_file": "wheels/py39/regex-2024.11.6-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py39/regex-2026.1.15-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
             },
             {
                 "module": "tzlocal",
@@ -3773,15 +3773,15 @@
             },
             {
                 "module": "pytz",
-                "input_file": "wheels/shared/pytz-2025.2-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/pytz-2026.2-py2.py3-none-any.whl"
             },
             {
                 "module": "regex",
-                "input_file": "wheels/py313/regex-2024.11.6-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py313/regex-2026.6.28-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
             },
             {
                 "module": "tzlocal",
-                "input_file": "wheels/py3/tzlocal-5.3.1-py3-none-any.whl"
+                "input_file": "wheels/py3/tzlocal-5.4.4-py3-none-any.whl"
             }
         ]
     }
