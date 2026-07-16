@@ -119,7 +119,7 @@
                 <th>DETECTION URL</th>
                 <td>
                   <a href="javascript:;"
-                     onclick="context_menu(this, [{'contains': ['url'], 'value': '{{ data.detection_url }}' }], 0, {{ container.id }}, null, false);">
+                     onclick="context_menu(this, [{'contains': ['url'], 'value': '{{ data.detection_url|escapejs }}' }], 0, {{ container.id }}, null, false);">
                     {{ data.detection_url }}
                     &nbsp;
                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>
@@ -166,7 +166,7 @@
                   <th>SRC HOST URL</th>
                   <td>
                     <a href="javascript:;"
-                       onclick="context_menu(this, [{'contains': ['url'], 'value': '{{ data.src_host.url }}' }], 0, {{ container.id }}, null, false);">
+                       onclick="context_menu(this, [{'contains': ['url'], 'value': '{{ data.src_host.url|escapejs }}' }], 0, {{ container.id }}, null, false);">
                       {{ data.src_host.url }}
                       &nbsp;
                       <span class="fa fa-caret-down" style="font-size: smaller;"></span>
@@ -198,7 +198,7 @@
                   <th>SRC ACCOUNT URL</th>
                   <td>
                     <a href="javascript:;"
-                       onclick="context_menu(this, [{'contains': ['url'], 'value': '{{ data.src_account.url }}' }], 0, {{ container.id }}, null, false);">
+                       onclick="context_menu(this, [{'contains': ['url'], 'value': '{{ data.src_account.url|escapejs }}' }], 0, {{ container.id }}, null, false);">
                       {{ data.src_account.url }}
                       &nbsp;
                       <span class="fa fa-caret-down" style="font-size: smaller;"></span>
