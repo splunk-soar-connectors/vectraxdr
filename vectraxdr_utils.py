@@ -25,6 +25,7 @@ import os
 import time
 import uuid
 from datetime import datetime, timezone
+from urllib.parse import urlsplit
 
 import dateparser
 import encryption_helper
@@ -280,7 +281,28 @@ class VectraxdrUtils:
         is_stream_download = kwargs.pop("is_stream_download", False)
         # Create a URL to connect to
         next_page_url = kwargs.pop("next_page_url", None)
-        url = next_page_url or f"{self._connector.config.get('base_url').rstrip('/')}{endpoint}"
+        base_url = self._connector.config.get("base_url").rstrip("/")
+        if next_page_url:
+            base_origin = urlsplit(base_url)
+            next_origin = urlsplit(next_page_url)
+            try:
+                base_port = base_origin.port or (443 if base_origin.scheme.lower() == "https" else 80)
+                next_port = next_origin.port or (443 if next_origin.scheme.lower() == "https" else 80)
+            except ValueError as e:
+                return RetVal(action_result.set_status(phantom.APP_ERROR, f"Invalid pagination URL: {e}"))
+
+            if (
+                next_origin.scheme.lower(),
+                next_origin.hostname,
+                next_port,
+            ) != (
+                base_origin.scheme.lower(),
+                base_origin.hostname,
+                base_port,
+            ):
+                return RetVal(action_result.set_status(phantom.APP_ERROR, "Refusing pagination URL from a different origin"))
+
+        url = next_page_url or f"{base_url}{endpoint}"
 
         no_of_retries = consts.VECTRA_NO_OF_RETRIES
 
@@ -294,7 +316,7 @@ class VectraxdrUtils:
                     timeout=consts.VECTRA_REQUEST_TIMEOUT,
                     headers=headers,
                     params=params,
-                    verify=self._connector.config.get("verify_server_cert", False),
+                    verify=self._connector.config.get("verify_server_cert", True),
                     stream=is_stream_download,
                     **kwargs,
                 )

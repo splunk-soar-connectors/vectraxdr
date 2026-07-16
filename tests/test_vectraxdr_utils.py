@@ -380,6 +380,32 @@ class TestGeneralCases(unittest.TestCase):
             self.action_result.get_message(), "Error connecting to server. Details: Error code: error code. Error message: error message"
         )
 
+    @patch("vectraxdr_utils.requests.get")
+    def test_make_rest_call_rejects_cross_origin_pagination(self, mock_get):
+        """Test that pagination does not forward authorization to another origin."""
+        self.util._connector.config = {"base_url": "https://vectra.example"}
+
+        ret_val, response = self.util._make_rest_call(
+            "/endpoint", self.action_result, headers={}, next_page_url="https://attacker.example/page/2"
+        )
+
+        self.assertFalse(ret_val)
+        self.assertIsNone(response)
+        self.assertEqual(self.action_result.get_message(), "Refusing pagination URL from a different origin")
+        mock_get.assert_not_called()
+
+    @patch("vectraxdr_utils.requests.get")
+    def test_make_rest_call_uses_tls_verification_by_default(self, mock_get):
+        """Test that requests verify TLS when the asset omits the setting."""
+        self.util._connector.config = {"base_url": "https://vectra.example"}
+        self.util._connector.get_app_json.return_value = {"app_version": "1.0.0"}
+        mock_get.return_value.status_code = 200
+        with patch.object(self.util, "_process_response", return_value=RetVal(True, {})):
+            ret_val, _response = self.util._make_rest_call("/endpoint", self.action_result, headers={})
+
+        self.assertTrue(ret_val)
+        self.assertTrue(mock_get.call_args.kwargs["verify"])
+
     def test_process_response_unknown_fail(self):
         """Test the _process_response for unknown response."""
         response_obj = requests.Response()

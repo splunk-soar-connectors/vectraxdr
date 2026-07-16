@@ -398,6 +398,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **base_url** | required | string | Vectra Base URL |
 **client_id** | required | string | Client ID |
 **client_secret** | required | password | Client Secret |
+**verify_server_cert** | optional | boolean | Verify server SSL certificate |
 **is_entity_prioritized** | optional | string | Poll only prioritized entities |
 **entity_type** | optional | string | Entity type (On Poll) |
 **entity_tags** | optional | string | Filter entities with given tags (Comma-separated) (On Poll) |
