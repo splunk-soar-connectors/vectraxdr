@@ -23,7 +23,7 @@
 
 import json
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, mock_open, patch
 
 import requests
 from parameterized import parameterized
@@ -405,6 +405,22 @@ class TestGeneralCases(unittest.TestCase):
 
         self.assertTrue(ret_val)
         self.assertTrue(mock_get.call_args.kwargs["verify"])
+
+    @patch("vectraxdr_utils.open", new_callable=mock_open)
+    @patch("vectraxdr_utils.os.makedirs")
+    @patch("vectraxdr_utils.Vault.get_vault_tmp_dir", return_value="/tmp/vault")
+    def test_process_pcap_response_strips_path_components(self, _mock_vault_dir, _mock_makedirs, mocked_open):
+        """Test that both POSIX and Windows path components are removed."""
+        response = Mock()
+        response.headers = {"Content-Disposition": 'attachment; filename="../..\\payload.pcap"'}
+        response.iter_content.return_value = []
+        response.status_code = 200
+
+        ret_val, _response = self.util._process_pcap_response(response, self.action_result)
+
+        self.assertTrue(ret_val)
+        self.assertTrue(self.util.file_path.endswith("/payload.pcap"))
+        mocked_open.assert_called_once_with(self.util.file_path, "wb")
 
     def test_process_response_unknown_fail(self):
         """Test the _process_response for unknown response."""

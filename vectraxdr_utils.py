@@ -194,8 +194,12 @@ class VectraxdrUtils:
 
         response_headers = response.headers
         filename = response_headers["Content-Disposition"].split("filename=")[-1]
-        filename = filename.replace('"', "")
-        file_path = f"{local_dir}/{filename}"
+        filename = filename.replace('"', "").strip()
+        filename = filename.rsplit("/", 1)[-1].rsplit("\\", 1)[-1]
+        if filename in {"", ".", ".."}:
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Refusing unsafe filename in Content-Disposition header"), None)
+
+        file_path = os.path.join(local_dir, filename)
         self.file_path = file_path
 
         try:
