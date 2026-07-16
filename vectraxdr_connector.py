@@ -21,7 +21,6 @@
 # and limitations under the License.
 
 import json
-from importlib import import_module
 
 import phantom.app as phantom
 import requests
@@ -29,8 +28,45 @@ from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 
 import vectraxdr_consts as consts
-from actions import BaseAction
+from actions.vectraxdr_add_assignment import AddAssignmentAction
+from actions.vectraxdr_add_note import AddNoteAction
+from actions.vectraxdr_add_tags import AddTagsAction
+from actions.vectraxdr_describe_detection import DescribeDetectionAction
+from actions.vectraxdr_describe_entity import DescribeEntityAction
+from actions.vectraxdr_download_pcap import DownloadPCAPAction
+from actions.vectraxdr_list_entity_detections import ListEntityDetectionsAction
+from actions.vectraxdr_mark_detection import MarkDetectionAction
+from actions.vectraxdr_mark_entity_detections import MarkEntityDetectionsAction
+from actions.vectraxdr_on_poll import OnPollAction
+from actions.vectraxdr_remove_note import RemoveNoteAction
+from actions.vectraxdr_remove_tags import RemoveTagsAction
+from actions.vectraxdr_resolve_assignment import ResolveAssignmentAction
+from actions.vectraxdr_test_connectivity import TestConnectivityAction
+from actions.vectraxdr_unmark_detection import UnmarkDetectionAction
+from actions.vectraxdr_update_assignment import UpdateAssignmentAction
+from actions.vectraxdr_update_note import UpdateNoteAction
 from vectraxdr_utils import VectraxdrUtils
+
+
+ACTION_HANDLERS = {
+    "add_assignment": AddAssignmentAction,
+    "add_note": AddNoteAction,
+    "add_tags": AddTagsAction,
+    "describe_detection": DescribeDetectionAction,
+    "describe_entity": DescribeEntityAction,
+    "download_pcap": DownloadPCAPAction,
+    "list_entity_detections": ListEntityDetectionsAction,
+    "mark_detection": MarkDetectionAction,
+    "mark_entity_detections": MarkEntityDetectionsAction,
+    "on_poll": OnPollAction,
+    "remove_note": RemoveNoteAction,
+    "remove_tags": RemoveTagsAction,
+    "resolve_assignment": ResolveAssignmentAction,
+    "test_connectivity": TestConnectivityAction,
+    "unmark_detection": UnmarkDetectionAction,
+    "update_assignment": UpdateAssignmentAction,
+    "update_note": UpdateNoteAction,
+}
 
 
 class VectraxdrConnector(BaseConnector):
@@ -51,15 +87,10 @@ class VectraxdrConnector(BaseConnector):
         action_id = self.get_action_identifier()
         self.debug_print("action_id", self.get_action_identifier())
 
-        action_name = f"actions.vectraxdr_{action_id}"
-        import_module(action_name, package="actions")
-
-        base_action_sub_classes = BaseAction.__subclasses__()
-        self.debug_print(f"Finding action module: {action_name}")
-        for action_class in base_action_sub_classes:
-            if action_class.__module__ == action_name:
-                action = action_class(self, param)
-                return action.execute()
+        action_class = ACTION_HANDLERS.get(action_id)
+        if action_class:
+            action = action_class(self, param)
+            return action.execute()
 
         self.debug_print("Action not implemented")
         return phantom.APP_ERROR
