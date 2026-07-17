@@ -15,7 +15,7 @@
     "utctime_updated": "2026-07-07T23:53:07.636047Z",
     "package_name": "phantom_vectraxdr",
     "main_module": "vectraxdr_connector.py",
-    "min_phantom_version": "6.0.2",
+    "min_phantom_version": "6.3.0",
     "fips_compliant": false,
     "app_wizard_version": "1.0.0",
     "configuration": {
@@ -3784,7 +3784,7 @@
             },
             {
                 "module": "regex",
-                "input_file": "wheels/py313/regex-2026.6.28-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py313/regex-2026.7.10-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
             },
             {
                 "module": "tzlocal",
