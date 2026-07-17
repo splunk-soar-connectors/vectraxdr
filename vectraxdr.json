@@ -15,7 +15,7 @@
     "utctime_updated": "2026-07-07T23:53:07.636047Z",
     "package_name": "phantom_vectraxdr",
     "main_module": "vectraxdr_connector.py",
-    "min_phantom_version": "6.0.2",
+    "min_phantom_version": "6.3.0",
     "fips_compliant": false,
     "app_wizard_version": "1.0.0",
     "configuration": {
@@ -41,6 +41,13 @@
             "required": true,
             "order": 3
         },
+        "verify_server_cert": {
+            "description": "Verify server SSL certificate",
+            "data_type": "boolean",
+            "default": true,
+            "required": false,
+            "order": 4
+        },
         "is_entity_prioritized": {
             "description": "Poll only prioritized entities",
             "data_type": "string",
@@ -50,7 +57,7 @@
                 "False"
             ],
             "default": "True",
-            "order": 4
+            "order": 5
         },
         "entity_type": {
             "description": "Entity type (On Poll)",
@@ -61,16 +68,16 @@
                 "Account"
             ],
             "default": "All",
-            "order": 5
+            "order": 6
         },
         "entity_tags": {
             "description": "Filter entities with given tags (Comma-separated) (On Poll)",
             "data_type": "string",
-            "order": 6
+            "order": 7
         },
         "ph1": {
             "data_type": "ph",
-            "order": 7
+            "order": 8
         },
         "detection_category": {
             "description": "Filter detection category (On Poll)",
@@ -84,45 +91,45 @@
                 "Info",
                 "All"
             ],
-            "order": 8
+            "order": 9
         },
         "detection_type": {
             "description": "Filter detection type (On Poll)",
             "data_type": "string",
-            "order": 9
+            "order": 10
         },
         "urgency_score_low_threshold": {
             "description": "Set container severity 'low' if entity has equal or less urgency score",
             "data_type": "numeric",
             "default": 30,
-            "order": 10
+            "order": 11
         },
         "urgency_score_medium_threshold": {
             "description": "Set container severity 'medium' if entity has equal or less urgency score",
             "data_type": "numeric",
             "default": 50,
-            "order": 11
+            "order": 12
         },
         "on_poll_start_time": {
             "description": "Start time for manual polling and first run of schedule polling (Any valid ISO date and time format string)",
             "data_type": "string",
-            "order": 12
+            "order": 13
         },
         "ph2": {
             "data_type": "ph",
-            "order": 13
+            "order": 14
         },
         "manual_max_allowed_container": {
             "description": "Max entities to ingest for manual polling",
             "data_type": "numeric",
             "default": 100,
-            "order": 14
+            "order": 15
         },
         "schedule_max_allowed_container": {
             "description": "Max entities to ingest for schedule polling",
             "data_type": "numeric",
             "default": 100,
-            "order": 15
+            "order": 16
         }
     },
     "actions": [
@@ -3777,7 +3784,7 @@
             },
             {
                 "module": "regex",
-                "input_file": "wheels/py313/regex-2026.6.28-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py313/regex-2026.7.10-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
             },
             {
                 "module": "tzlocal",

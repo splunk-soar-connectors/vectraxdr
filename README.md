@@ -4,7 +4,7 @@ Publisher: Vectra <br>
 Connector Version: 1.0.3 <br>
 Product Vendor: Vectra <br>
 Product Name: Vectra <br>
-Minimum Product Version: 6.0.2
+Minimum Product Version: 6.3.0
 
 Vectra AI is the leader in AI-driven threat detection and response for hybrid and multi-cloud enterprises. Organizations worldwide rely on Vectra to stay ahead of modern cyber-attacks. The Vectra AI App enables the security operations team to consume the industry's richest threat signals spanning public cloud, SaaS, identity and data center networks and take appropriate action whether automated, semi-automated, or manual, using Splunk SOAR
 
@@ -398,6 +398,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **base_url** | required | string | Vectra Base URL |
 **client_id** | required | string | Client ID |
 **client_secret** | required | password | Client Secret |
+**verify_server_cert** | optional | boolean | Verify server SSL certificate |
 **is_entity_prioritized** | optional | string | Poll only prioritized entities |
 **entity_type** | optional | string | Entity type (On Poll) |
 **entity_tags** | optional | string | Filter entities with given tags (Comma-separated) (On Poll) |
